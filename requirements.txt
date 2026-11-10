@@ -1,0 +1,25 @@
+# Core Flask Web Framework & REST API
+flask>=3.0.0,<4.0.0
+werkzeug>=3.0.0,<4.0.0
+jinja2>=3.1.2,<4.0.0
+
+# Scientific Computing & Data Manipulation
+numpy>=1.24.0,<2.3.0
+pandas>=2.0.0,<3.0.0
+scipy>=1.10.0,<2.0.0
+
+# Machine Learning & Model Pipelines
+scikit-learn>=1.3.0,<2.0.0
+joblib>=1.3.0,<2.0.0
+
+# Data Visualization (Agg non-GUI backend enabled)
+matplotlib>=3.7.0,<4.0.0
+seaborn>=0.12.0,<1.0.0
+
+# Notebook Execution & Quality Assurance
+jupyter>=1.0.0
+notebook>=7.0.0
+nbconvert>=7.0.0
+ipykernel>=6.20.0
+pytest>=8.0.0,<10.0.0
+

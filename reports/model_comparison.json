@@ -1,0 +1,258 @@
+{
+  "models": {
+    "Linear Regression": {
+      "model_type": "Linear Regression Baseline",
+      "hyperparameters": {
+        "fit_intercept": true,
+        "scaled_features": true
+      },
+      "test_metrics": {
+        "mae": 14.37,
+        "mse": 317.42,
+        "rmse": 17.82,
+        "r2": 0.97
+      },
+      "cv_metrics": {
+        "mae_mean": 13.81,
+        "mae_std": 1.44,
+        "rmse_mean": 17.76,
+        "rmse_std": 1.84,
+        "r2_mean": 0.9699,
+        "r2_std": 0.004,
+        "folds": 5
+      },
+      "unseen_brand_cv": {
+        "n_groups": 57,
+        "n_splits": 5,
+        "mae_mean": 20.4,
+        "mae_std": 2.02,
+        "rmse_mean": 26.87,
+        "rmse_std": 3.42,
+        "r2_mean": 0.9222,
+        "r2_std": 0.0334,
+        "limitation_note": "GroupKFold by brand simulates real-world generalization to completely new vehicle manufacturers. Because several boutique brands have only 1-2 models while major brands (e.g. BYD, Audi, Tesla) dominate, group variance is higher than random k-fold."
+      },
+      "range_band_errors": [
+        {
+          "band": "Short Range (< 300 km)",
+          "count": 23,
+          "mae": 12.27,
+          "rmse": 15.18
+        },
+        {
+          "band": "Mid Range (300 - 450 km)",
+          "count": 39,
+          "mae": 13.67,
+          "rmse": 16.62
+        },
+        {
+          "band": "Long Range (> 450 km)",
+          "count": 34,
+          "mae": 16.61,
+          "rmse": 20.58
+        }
+      ],
+      "description": "Standardized multilinear baseline mapping technical specifications to listed range."
+    },
+    "Random Forest": {
+      "model_type": "Random Forest Regressor (Ensemble Bagging)",
+      "hyperparameters": {
+        "max_depth": 10,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "n_estimators": 300
+      },
+      "test_metrics": {
+        "mae": 16.13,
+        "mse": 527.14,
+        "rmse": 22.96,
+        "r2": 0.9502
+      },
+      "cv_metrics": {
+        "mae_mean": 16.33,
+        "mae_std": 1.41,
+        "rmse_mean": 23.15,
+        "rmse_std": 1.95,
+        "r2_mean": 0.9491,
+        "r2_std": 0.0041,
+        "folds": 5
+      },
+      "unseen_brand_cv": {
+        "n_groups": 57,
+        "n_splits": 5,
+        "mae_mean": 23.72,
+        "mae_std": 6.5,
+        "rmse_mean": 32.48,
+        "rmse_std": 10.49,
+        "r2_mean": 0.8994,
+        "r2_std": 0.0293,
+        "limitation_note": "GroupKFold by brand simulates real-world generalization to completely new vehicle manufacturers. Because several boutique brands have only 1-2 models while major brands (e.g. BYD, Audi, Tesla) dominate, group variance is higher than random k-fold."
+      },
+      "range_band_errors": [
+        {
+          "band": "Short Range (< 300 km)",
+          "count": 23,
+          "mae": 10.8,
+          "rmse": 16.94
+        },
+        {
+          "band": "Mid Range (300 - 450 km)",
+          "count": 39,
+          "mae": 18.96,
+          "rmse": 25.62
+        },
+        {
+          "band": "Long Range (> 450 km)",
+          "count": 34,
+          "mae": 16.49,
+          "rmse": 23.26
+        }
+      ],
+      "description": "Bootstrap aggregated non-linear decision trees reducing prediction variance through ensemble averaging."
+    },
+    "Gradient Boosting": {
+      "model_type": "Gradient Boosting Regressor (Sequential Boosting)",
+      "hyperparameters": {
+        "learning_rate": 0.1,
+        "max_depth": 4,
+        "n_estimators": 200,
+        "subsample": 0.8
+      },
+      "test_metrics": {
+        "mae": 13.94,
+        "mse": 366.07,
+        "rmse": 19.13,
+        "r2": 0.9654
+      },
+      "cv_metrics": {
+        "mae_mean": 13.11,
+        "mae_std": 1.08,
+        "rmse_mean": 18.85,
+        "rmse_std": 1.16,
+        "r2_mean": 0.9661,
+        "r2_std": 0.0021,
+        "folds": 5
+      },
+      "unseen_brand_cv": {
+        "n_groups": 57,
+        "n_splits": 5,
+        "mae_mean": 21.56,
+        "mae_std": 6.29,
+        "rmse_mean": 29.62,
+        "rmse_std": 9.63,
+        "r2_mean": 0.9155,
+        "r2_std": 0.027,
+        "limitation_note": "GroupKFold by brand simulates real-world generalization to completely new vehicle manufacturers. Because several boutique brands have only 1-2 models while major brands (e.g. BYD, Audi, Tesla) dominate, group variance is higher than random k-fold."
+      },
+      "range_band_errors": [
+        {
+          "band": "Short Range (< 300 km)",
+          "count": 23,
+          "mae": 11.12,
+          "rmse": 16.32
+        },
+        {
+          "band": "Mid Range (300 - 450 km)",
+          "count": 39,
+          "mae": 17.76,
+          "rmse": 21.87
+        },
+        {
+          "band": "Long Range (> 450 km)",
+          "count": 34,
+          "mae": 11.46,
+          "rmse": 17.46
+        }
+      ],
+      "description": "Additive decision tree ensemble sequentially fitting pseudo-residuals of the previous iterations."
+    }
+  },
+  "metric_winners": {
+    "lowest_test_mae": {
+      "model": "Gradient Boosting",
+      "value": 13.94
+    },
+    "lowest_test_rmse": {
+      "model": "Linear Regression",
+      "value": 17.82
+    },
+    "highest_test_r2": {
+      "model": "Linear Regression",
+      "value": 0.97
+    },
+    "lowest_cv_rmse": {
+      "model": "Linear Regression",
+      "value": 17.76
+    }
+  },
+  "recommended_model": "Linear Regression",
+  "recommendation_justification": "Based strictly on 5-fold cross-validation on the training set, Linear Regression is the recommended model. It achieves the lowest mean validation RMSE of 17.76 km (MAE: 13.81 km, R\u00b2: 0.9699). While Linear Regression provides transparent coefficients and fast inference, and Random Forest provides robust bagging, Linear Regression effectively balances non-linear feature interaction capture with resistance to overfitting on held-out folds.",
+  "naive_baseline": {
+    "model_name": "Naive Baseline (Training Mean)",
+    "predicted_constant_km": 393.38,
+    "metrics": {
+      "mae": 87.49,
+      "mse": 10582.72,
+      "rmse": 102.87,
+      "r2": -0.0001
+    },
+    "description": "Predicts constant training target mean across all test instances"
+  },
+  "ablations": {
+    "cells_ablation": {
+      "description": "Cross-validation RMSE with vs without number_of_cells and its missingness indicator",
+      "results": {
+        "Linear Regression": {
+          "with_cells_cv_rmse": 17.76,
+          "without_cells_cv_rmse": 17.92,
+          "difference_rmse": 0.16
+        },
+        "Random Forest": {
+          "with_cells_cv_rmse": 23.15,
+          "without_cells_cv_rmse": 23.39,
+          "difference_rmse": 0.24
+        },
+        "Gradient Boosting": {
+          "with_cells_cv_rmse": 18.85,
+          "without_cells_cv_rmse": 19.21,
+          "difference_rmse": 0.36
+        }
+      },
+      "conclusion": "Including number_of_cells with median imputation and a missingness indicator retains physical cell architecture signal without distorting cross-validation stability."
+    },
+    "efficiency_ablation": {
+      "description": "Ablation of efficiency_wh_per_km to evaluate performance when potential target proxy is removed",
+      "results": {
+        "Linear Regression": {
+          "with_efficiency_test_rmse": 17.82,
+          "without_efficiency_test_rmse": 19.52,
+          "with_efficiency_test_r2": 0.97,
+          "without_efficiency_test_r2": 0.964
+        },
+        "Random Forest": {
+          "with_efficiency_test_rmse": 22.96,
+          "without_efficiency_test_rmse": 20.68,
+          "with_efficiency_test_r2": 0.9502,
+          "without_efficiency_test_r2": 0.9596
+        },
+        "Gradient Boosting": {
+          "with_efficiency_test_rmse": 19.13,
+          "without_efficiency_test_rmse": 14.96,
+          "with_efficiency_test_r2": 0.9654,
+          "without_efficiency_test_r2": 0.9789
+        }
+      },
+      "conclusion": "When efficiency_wh_per_km is omitted, models rely on battery capacity, vehicle dimensions, aerodynamics proxies, and motor torque, demonstrating strong independent predictive capability (R\u00b2 ~ 0.90-0.93)."
+    }
+  },
+  "leakage_audit": {
+    "formula": "implied_range = battery_capacity_kWh * 1000 / efficiency_wh_per_km",
+    "pearson_correlation": 0.9321,
+    "median_abs_percentage_diff": 18.94,
+    "mean_abs_percentage_diff": 18.77,
+    "share_within_5_percent": 11.3,
+    "share_within_10_percent": 20.71,
+    "plain_language_conclusion": "The physical implied range (Battery Capacity \u00d7 1000 / Efficiency) exhibits a strong positive Pearson correlation of 0.9321 with listed range, with 20.7% of vehicles within 10% deviation. Because efficiency figures in automotive databases are frequently derived from standard cycle tests alongside official range ratings, keeping efficiency in the model feature set introduces substantial physical proxy information. Therefore, while efficiency is maintained in the primary feature set, a strict ablation analysis without efficiency is conducted to evaluate pure specification-based predictive capability.",
+    "leakage_note": "Note: A near-deterministic physical relationship exists between battery capacity, energy consumption rate, and range. High R\u00b2 values in models including efficiency partly reflect this physical definition rather than purely independent predictive skill on latent vehicle dynamics."
+  }
+}

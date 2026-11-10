@@ -1,0 +1,1518 @@
+{
+  "dataset_hash_sha256": "92312ec41bebcd359db1931b83ed450534f56a5899e6f232fc3262a6a4bcc4ca",
+  "trained_at": "2026-11-10T18:56:20.447578",
+  "library_versions": {
+    "python": "3.10.11",
+    "scikit_learn": "1.7.2",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  },
+  "train_indices": [
+    208,
+    204,
+    320,
+    311,
+    22,
+    446,
+    46,
+    117,
+    265,
+    126,
+    181,
+    155,
+    57,
+    410,
+    124,
+    400,
+    24,
+    17,
+    66,
+    373,
+    86,
+    31,
+    84,
+    329,
+    234,
+    247,
+    333,
+    132,
+    94,
+    417,
+    310,
+    377,
+    176,
+    444,
+    199,
+    418,
+    465,
+    5,
+    116,
+    45,
+    16,
+    441,
+    342,
+    3,
+    455,
+    60,
+    110,
+    305,
+    431,
+    29,
+    290,
+    148,
+    26,
+    7,
+    434,
+    108,
+    253,
+    445,
+    118,
+    114,
+    424,
+    394,
+    255,
+    354,
+    364,
+    476,
+    192,
+    371,
+    426,
+    141,
+    391,
+    67,
+    471,
+    168,
+    360,
+    397,
+    220,
+    109,
+    222,
+    145,
+    237,
+    152,
+    314,
+    238,
+    83,
+    402,
+    165,
+    405,
+    408,
+    74,
+    250,
+    450,
+    378,
+    119,
+    392,
+    286,
+    228,
+    453,
+    452,
+    229,
+    211,
+    367,
+    261,
+    36,
+    196,
+    139,
+    349,
+    218,
+    272,
+    423,
+    59,
+    111,
+    231,
+    244,
+    6,
+    416,
+    331,
+    158,
+    150,
+    177,
+    184,
+    10,
+    365,
+    103,
+    81,
+    38,
+    301,
+    167,
+    447,
+    280,
+    198,
+    284,
+    449,
+    428,
+    194,
+    89,
+    146,
+    163,
+    352,
+    147,
+    2,
+    92,
+    383,
+    69,
+    274,
+    123,
+    353,
+    96,
+    143,
+    239,
+    362,
+    380,
+    358,
+    97,
+    414,
+    68,
+    23,
+    37,
+    335,
+    144,
+    122,
+    183,
+    202,
+    246,
+    346,
+    302,
+    336,
+    287,
+    379,
+    271,
+    125,
+    289,
+    223,
+    401,
+    219,
+    129,
+    403,
+    448,
+    420,
+    361,
+    278,
+    340,
+    281,
+    351,
+    368,
+    112,
+    179,
+    294,
+    325,
+    316,
+    459,
+    369,
+    233,
+    298,
+    164,
+    136,
+    197,
+    258,
+    232,
+    115,
+    120,
+    334,
+    224,
+    386,
+    323,
+    127,
+    285,
+    395,
+    107,
+    355,
+    312,
+    133,
+    475,
+    44,
+    439,
+    65,
+    283,
+    85,
+    242,
+    186,
+    159,
+    12,
+    35,
+    28,
+    170,
+    142,
+    382,
+    425,
+    221,
+    95,
+    51,
+    240,
+    357,
+    433,
+    178,
+    41,
+    462,
+    206,
+    282,
+    254,
+    396,
+    4,
+    256,
+    429,
+    100,
+    226,
+    409,
+    213,
+    171,
+    98,
+    292,
+    215,
+    61,
+    47,
+    32,
+    267,
+    327,
+    200,
+    427,
+    27,
+    374,
+    230,
+    260,
+    288,
+    162,
+    407,
+    138,
+    62,
+    135,
+    128,
+    454,
+    8,
+    326,
+    442,
+    64,
+    300,
+    14,
+    156,
+    40,
+    438,
+    404,
+    216,
+    279,
+    415,
+    411,
+    337,
+    236,
+    207,
+    212,
+    295,
+    436,
+    251,
+    467,
+    437,
+    303,
+    350,
+    269,
+    201,
+    161,
+    43,
+    217,
+    190,
+    309,
+    259,
+    105,
+    53,
+    389,
+    1,
+    422,
+    460,
+    49,
+    80,
+    205,
+    34,
+    263,
+    366,
+    91,
+    339,
+    451,
+    52,
+    345,
+    264,
+    241,
+    13,
+    315,
+    88,
+    387,
+    273,
+    166,
+    328,
+    470,
+    134,
+    306,
+    464,
+    319,
+    243,
+    54,
+    363,
+    50,
+    174,
+    189,
+    474,
+    187,
+    169,
+    58,
+    48,
+    344,
+    235,
+    252,
+    21,
+    313,
+    160,
+    276,
+    443,
+    191,
+    385,
+    293,
+    413,
+    343,
+    257,
+    308,
+    149,
+    130,
+    151,
+    359,
+    99,
+    372,
+    87,
+    458,
+    330,
+    214,
+    466,
+    121,
+    477,
+    20,
+    188,
+    71,
+    106,
+    270,
+    348,
+    435,
+    102
+  ],
+  "test_indices": [
+    469,
+    33,
+    131,
+    72,
+    78,
+    113,
+    275,
+    185,
+    262,
+    9,
+    322,
+    430,
+    297,
+    463,
+    82,
+    440,
+    30,
+    101,
+    412,
+    180,
+    356,
+    249,
+    172,
+    376,
+    0,
+    347,
+    11,
+    93,
+    277,
+    195,
+    266,
+    182,
+    421,
+    209,
+    55,
+    227,
+    18,
+    432,
+    154,
+    75,
+    39,
+    399,
+    175,
+    472,
+    79,
+    304,
+    393,
+    90,
+    381,
+    245,
+    390,
+    76,
+    321,
+    193,
+    203,
+    173,
+    73,
+    307,
+    468,
+    225,
+    137,
+    77,
+    63,
+    268,
+    153,
+    456,
+    70,
+    375,
+    341,
+    388,
+    299,
+    473,
+    461,
+    332,
+    419,
+    15,
+    457,
+    370,
+    19,
+    398,
+    318,
+    56,
+    210,
+    338,
+    317,
+    104,
+    157,
+    406,
+    25,
+    384,
+    324,
+    140,
+    42,
+    248,
+    296,
+    291
+  ],
+  "feature_names": [
+    "top_speed_kmh",
+    "battery_capacity_kWh",
+    "torque_nm",
+    "efficiency_wh_per_km",
+    "acceleration_0_100_s",
+    "fast_charging_power_kw_dc",
+    "towing_capacity_kg",
+    "cargo_volume_l",
+    "seats",
+    "length_mm",
+    "width_mm",
+    "height_mm",
+    "number_of_cells",
+    "brand",
+    "fast_charge_port",
+    "drivetrain",
+    "segment",
+    "car_body_type"
+  ],
+  "numerical_features": [
+    "top_speed_kmh",
+    "battery_capacity_kWh",
+    "torque_nm",
+    "efficiency_wh_per_km",
+    "acceleration_0_100_s",
+    "fast_charging_power_kw_dc",
+    "towing_capacity_kg",
+    "cargo_volume_l",
+    "seats",
+    "length_mm",
+    "width_mm",
+    "height_mm",
+    "number_of_cells"
+  ],
+  "categorical_features": [
+    "brand",
+    "fast_charge_port",
+    "drivetrain",
+    "segment",
+    "car_body_type"
+  ],
+  "feature_ranges": {
+    "top_speed_kmh": {
+      "min": 125.0,
+      "max": 325.0,
+      "median": 180.0,
+      "mean": 185.04
+    },
+    "battery_capacity_kWh": {
+      "min": 21.3,
+      "max": 118.0,
+      "median": 76.75,
+      "mean": 74.2
+    },
+    "torque_nm": {
+      "min": 113.0,
+      "max": 1350.0,
+      "median": 420.0,
+      "mean": 497.27
+    },
+    "efficiency_wh_per_km": {
+      "min": 109.0,
+      "max": 370.0,
+      "median": 155.0,
+      "mean": 163.19
+    },
+    "acceleration_0_100_s": {
+      "min": 2.2,
+      "max": 19.1,
+      "median": 6.6,
+      "mean": 6.86
+    },
+    "fast_charging_power_kw_dc": {
+      "min": 29.0,
+      "max": 281.0,
+      "median": 110.0,
+      "mean": 123.35
+    },
+    "towing_capacity_kg": {
+      "min": 0.0,
+      "max": 2500.0,
+      "median": 1000.0,
+      "mean": 1045.89
+    },
+    "cargo_volume_l": {
+      "min": 185.0,
+      "max": 1410.0,
+      "median": 466.5,
+      "mean": 490.25
+    },
+    "seats": {
+      "min": 2.0,
+      "max": 9.0,
+      "median": 5.0,
+      "mean": 5.25
+    },
+    "length_mm": {
+      "min": 3620.0,
+      "max": 5908.0,
+      "median": 4720.0,
+      "mean": 4675.76
+    },
+    "width_mm": {
+      "min": 1610.0,
+      "max": 2080.0,
+      "median": 1884.0,
+      "mean": 1886.15
+    },
+    "height_mm": {
+      "min": 1329.0,
+      "max": 1986.0,
+      "median": 1596.0,
+      "mean": 1600.65
+    },
+    "number_of_cells": {
+      "min": 72.0,
+      "max": 7920.0,
+      "median": 288.0,
+      "mean": 477.52
+    }
+  },
+  "categorical_options": {
+    "brand": [
+      "Abarth",
+      "Aiways",
+      "Alfa",
+      "Alpine",
+      "Audi",
+      "BMW",
+      "BYD",
+      "Cadillac",
+      "Citroen",
+      "DS",
+      "Dacia",
+      "Dongfeng",
+      "Elaris",
+      "Fiat",
+      "Ford",
+      "GWM",
+      "Genesis",
+      "Honda",
+      "Hongqi",
+      "Hyundai",
+      "Jaguar",
+      "Jeep",
+      "KGM",
+      "Kia",
+      "Leapmotor",
+      "Lexus",
+      "Lotus",
+      "Lucid",
+      "Lynk&Co",
+      "MG",
+      "Maserati",
+      "Maxus",
+      "Mazda",
+      "Mercedes-Benz",
+      "Mini",
+      "NIO",
+      "Nissan",
+      "Omoda",
+      "Opel",
+      "Peugeot",
+      "Polestar",
+      "Porsche",
+      "Renault",
+      "Rolls-Royce",
+      "Skoda",
+      "Skywell",
+      "Smart",
+      "Subaru",
+      "Tesla",
+      "Toyota",
+      "VinFast",
+      "Volkswagen",
+      "Volvo",
+      "Voyah",
+      "XPENG",
+      "Zeekr",
+      "firefly"
+    ],
+    "fast_charge_port": [
+      "CCS",
+      "CHAdeMO"
+    ],
+    "drivetrain": [
+      "AWD",
+      "FWD",
+      "RWD"
+    ],
+    "segment": [
+      "A - Mini",
+      "B - Compact",
+      "C - Medium",
+      "D - Large",
+      "E - Executive",
+      "F - Luxury",
+      "G - Sports",
+      "I - Luxury",
+      "JA - Mini",
+      "JB - Compact",
+      "JC - Medium",
+      "JD - Large",
+      "JE - Executive",
+      "JF - Luxury",
+      "N - Passenger Van"
+    ],
+    "car_body_type": [
+      "Cabriolet",
+      "Coupe",
+      "Hatchback",
+      "Liftback Sedan",
+      "SUV",
+      "Sedan",
+      "Small Passenger Van",
+      "Station/Estate"
+    ]
+  },
+  "target_column": "range_km",
+  "train_rows": 382,
+  "test_rows": 96,
+  "naive_baseline": {
+    "model_name": "Naive Baseline (Training Mean)",
+    "predicted_constant_km": 393.38,
+    "metrics": {
+      "mae": 87.49,
+      "mse": 10582.72,
+      "rmse": 102.87,
+      "r2": -0.0001
+    },
+    "description": "Predicts constant training target mean across all test instances"
+  },
+  "models": {
+    "Linear Regression": {
+      "model_type": "Linear Regression Baseline",
+      "hyperparameters": {
+        "fit_intercept": true,
+        "scaled_features": true
+      },
+      "test_metrics": {
+        "mae": 14.37,
+        "mse": 317.42,
+        "rmse": 17.82,
+        "r2": 0.97
+      },
+      "cv_metrics": {
+        "mae_mean": 13.81,
+        "mae_std": 1.44,
+        "rmse_mean": 17.76,
+        "rmse_std": 1.84,
+        "r2_mean": 0.9699,
+        "r2_std": 0.004,
+        "folds": 5
+      },
+      "unseen_brand_cv": {
+        "n_groups": 57,
+        "n_splits": 5,
+        "mae_mean": 20.4,
+        "mae_std": 2.02,
+        "rmse_mean": 26.87,
+        "rmse_std": 3.42,
+        "r2_mean": 0.9222,
+        "r2_std": 0.0334,
+        "limitation_note": "GroupKFold by brand simulates real-world generalization to completely new vehicle manufacturers. Because several boutique brands have only 1-2 models while major brands (e.g. BYD, Audi, Tesla) dominate, group variance is higher than random k-fold."
+      },
+      "range_band_errors": [
+        {
+          "band": "Short Range (< 300 km)",
+          "count": 23,
+          "mae": 12.27,
+          "rmse": 15.18
+        },
+        {
+          "band": "Mid Range (300 - 450 km)",
+          "count": 39,
+          "mae": 13.67,
+          "rmse": 16.62
+        },
+        {
+          "band": "Long Range (> 450 km)",
+          "count": 34,
+          "mae": 16.61,
+          "rmse": 20.58
+        }
+      ],
+      "description": "Standardized multilinear baseline mapping technical specifications to listed range."
+    },
+    "Random Forest": {
+      "model_type": "Random Forest Regressor (Ensemble Bagging)",
+      "hyperparameters": {
+        "max_depth": 10,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "n_estimators": 300
+      },
+      "test_metrics": {
+        "mae": 16.13,
+        "mse": 527.14,
+        "rmse": 22.96,
+        "r2": 0.9502
+      },
+      "cv_metrics": {
+        "mae_mean": 16.33,
+        "mae_std": 1.41,
+        "rmse_mean": 23.15,
+        "rmse_std": 1.95,
+        "r2_mean": 0.9491,
+        "r2_std": 0.0041,
+        "folds": 5
+      },
+      "unseen_brand_cv": {
+        "n_groups": 57,
+        "n_splits": 5,
+        "mae_mean": 23.72,
+        "mae_std": 6.5,
+        "rmse_mean": 32.48,
+        "rmse_std": 10.49,
+        "r2_mean": 0.8994,
+        "r2_std": 0.0293,
+        "limitation_note": "GroupKFold by brand simulates real-world generalization to completely new vehicle manufacturers. Because several boutique brands have only 1-2 models while major brands (e.g. BYD, Audi, Tesla) dominate, group variance is higher than random k-fold."
+      },
+      "range_band_errors": [
+        {
+          "band": "Short Range (< 300 km)",
+          "count": 23,
+          "mae": 10.8,
+          "rmse": 16.94
+        },
+        {
+          "band": "Mid Range (300 - 450 km)",
+          "count": 39,
+          "mae": 18.96,
+          "rmse": 25.62
+        },
+        {
+          "band": "Long Range (> 450 km)",
+          "count": 34,
+          "mae": 16.49,
+          "rmse": 23.26
+        }
+      ],
+      "description": "Bootstrap aggregated non-linear decision trees reducing prediction variance through ensemble averaging."
+    },
+    "Gradient Boosting": {
+      "model_type": "Gradient Boosting Regressor (Sequential Boosting)",
+      "hyperparameters": {
+        "learning_rate": 0.1,
+        "max_depth": 4,
+        "n_estimators": 200,
+        "subsample": 0.8
+      },
+      "test_metrics": {
+        "mae": 13.94,
+        "mse": 366.07,
+        "rmse": 19.13,
+        "r2": 0.9654
+      },
+      "cv_metrics": {
+        "mae_mean": 13.11,
+        "mae_std": 1.08,
+        "rmse_mean": 18.85,
+        "rmse_std": 1.16,
+        "r2_mean": 0.9661,
+        "r2_std": 0.0021,
+        "folds": 5
+      },
+      "unseen_brand_cv": {
+        "n_groups": 57,
+        "n_splits": 5,
+        "mae_mean": 21.56,
+        "mae_std": 6.29,
+        "rmse_mean": 29.62,
+        "rmse_std": 9.63,
+        "r2_mean": 0.9155,
+        "r2_std": 0.027,
+        "limitation_note": "GroupKFold by brand simulates real-world generalization to completely new vehicle manufacturers. Because several boutique brands have only 1-2 models while major brands (e.g. BYD, Audi, Tesla) dominate, group variance is higher than random k-fold."
+      },
+      "range_band_errors": [
+        {
+          "band": "Short Range (< 300 km)",
+          "count": 23,
+          "mae": 11.12,
+          "rmse": 16.32
+        },
+        {
+          "band": "Mid Range (300 - 450 km)",
+          "count": 39,
+          "mae": 17.76,
+          "rmse": 21.87
+        },
+        {
+          "band": "Long Range (> 450 km)",
+          "count": 34,
+          "mae": 11.46,
+          "rmse": 17.46
+        }
+      ],
+      "description": "Additive decision tree ensemble sequentially fitting pseudo-residuals of the previous iterations."
+    }
+  },
+  "metric_winners": {
+    "lowest_test_mae": {
+      "model": "Gradient Boosting",
+      "value": 13.94
+    },
+    "lowest_test_rmse": {
+      "model": "Linear Regression",
+      "value": 17.82
+    },
+    "highest_test_r2": {
+      "model": "Linear Regression",
+      "value": 0.97
+    },
+    "lowest_cv_rmse": {
+      "model": "Linear Regression",
+      "value": 17.76
+    }
+  },
+  "recommended_model": "Linear Regression",
+  "recommendation_justification": "Based strictly on 5-fold cross-validation on the training set, Linear Regression is the recommended model. It achieves the lowest mean validation RMSE of 17.76 km (MAE: 13.81 km, R\u00b2: 0.9699). While Linear Regression provides transparent coefficients and fast inference, and Random Forest provides robust bagging, Linear Regression effectively balances non-linear feature interaction capture with resistance to overfitting on held-out folds.",
+  "ablations": {
+    "cells_ablation": {
+      "description": "Cross-validation RMSE with vs without number_of_cells and its missingness indicator",
+      "results": {
+        "Linear Regression": {
+          "with_cells_cv_rmse": 17.76,
+          "without_cells_cv_rmse": 17.92,
+          "difference_rmse": 0.16
+        },
+        "Random Forest": {
+          "with_cells_cv_rmse": 23.15,
+          "without_cells_cv_rmse": 23.39,
+          "difference_rmse": 0.24
+        },
+        "Gradient Boosting": {
+          "with_cells_cv_rmse": 18.85,
+          "without_cells_cv_rmse": 19.21,
+          "difference_rmse": 0.36
+        }
+      },
+      "conclusion": "Including number_of_cells with median imputation and a missingness indicator retains physical cell architecture signal without distorting cross-validation stability."
+    },
+    "efficiency_ablation": {
+      "description": "Ablation of efficiency_wh_per_km to evaluate performance when potential target proxy is removed",
+      "results": {
+        "Linear Regression": {
+          "with_efficiency_test_rmse": 17.82,
+          "without_efficiency_test_rmse": 19.52,
+          "with_efficiency_test_r2": 0.97,
+          "without_efficiency_test_r2": 0.964
+        },
+        "Random Forest": {
+          "with_efficiency_test_rmse": 22.96,
+          "without_efficiency_test_rmse": 20.68,
+          "with_efficiency_test_r2": 0.9502,
+          "without_efficiency_test_r2": 0.9596
+        },
+        "Gradient Boosting": {
+          "with_efficiency_test_rmse": 19.13,
+          "without_efficiency_test_rmse": 14.96,
+          "with_efficiency_test_r2": 0.9654,
+          "without_efficiency_test_r2": 0.9789
+        }
+      },
+      "conclusion": "When efficiency_wh_per_km is omitted, models rely on battery capacity, vehicle dimensions, aerodynamics proxies, and motor torque, demonstrating strong independent predictive capability (R\u00b2 ~ 0.90-0.93)."
+    }
+  },
+  "leakage_audit": {
+    "formula": "implied_range = battery_capacity_kWh * 1000 / efficiency_wh_per_km",
+    "pearson_correlation": 0.9321,
+    "median_abs_percentage_diff": 18.94,
+    "mean_abs_percentage_diff": 18.77,
+    "share_within_5_percent": 11.3,
+    "share_within_10_percent": 20.71,
+    "plain_language_conclusion": "The physical implied range (Battery Capacity \u00d7 1000 / Efficiency) exhibits a strong positive Pearson correlation of 0.9321 with listed range, with 20.7% of vehicles within 10% deviation. Because efficiency figures in automotive databases are frequently derived from standard cycle tests alongside official range ratings, keeping efficiency in the model feature set introduces substantial physical proxy information. Therefore, while efficiency is maintained in the primary feature set, a strict ablation analysis without efficiency is conducted to evaluate pure specification-based predictive capability.",
+    "leakage_note": "Note: A near-deterministic physical relationship exists between battery capacity, energy consumption rate, and range. High R\u00b2 values in models including efficiency partly reflect this physical definition rather than purely independent predictive skill on latent vehicle dynamics."
+  },
+  "feature_importances": {
+    "Linear Regression": {
+      "model_name": "Linear Regression",
+      "primary_permutation_test_set": [
+        {
+          "feature": "battery_capacity_kWh",
+          "feature_label": "Battery Capacity Kwh",
+          "importance_mean": 114.3212,
+          "importance_std": 6.107
+        },
+        {
+          "feature": "height_mm",
+          "feature_label": "Height Mm",
+          "importance_mean": 28.5028,
+          "importance_std": 1.6995
+        },
+        {
+          "feature": "brand",
+          "feature_label": "Brand",
+          "importance_mean": 14.4181,
+          "importance_std": 1.5284
+        },
+        {
+          "feature": "car_body_type",
+          "feature_label": "Car Body Type",
+          "importance_mean": 8.5226,
+          "importance_std": 1.3729
+        },
+        {
+          "feature": "towing_capacity_kg",
+          "feature_label": "Towing Capacity Kg",
+          "importance_mean": 6.3598,
+          "importance_std": 0.8495
+        },
+        {
+          "feature": "segment",
+          "feature_label": "Segment",
+          "importance_mean": 5.6822,
+          "importance_std": 1.5575
+        },
+        {
+          "feature": "efficiency_wh_per_km",
+          "feature_label": "Efficiency Wh Per Km",
+          "importance_mean": 5.5275,
+          "importance_std": 1.0408
+        },
+        {
+          "feature": "torque_nm",
+          "feature_label": "Torque Nm",
+          "importance_mean": 4.183,
+          "importance_std": 0.6635
+        },
+        {
+          "feature": "fast_charging_power_kw_dc",
+          "feature_label": "Fast Charging Power Kw Dc",
+          "importance_mean": 3.1865,
+          "importance_std": 0.5921
+        },
+        {
+          "feature": "width_mm",
+          "feature_label": "Width Mm",
+          "importance_mean": 3.0133,
+          "importance_std": 0.4756
+        },
+        {
+          "feature": "top_speed_kmh",
+          "feature_label": "Top Speed Kmh",
+          "importance_mean": 1.9944,
+          "importance_std": 0.3287
+        },
+        {
+          "feature": "drivetrain",
+          "feature_label": "Drivetrain",
+          "importance_mean": 1.6202,
+          "importance_std": 0.4157
+        },
+        {
+          "feature": "number_of_cells",
+          "feature_label": "Number Of Cells",
+          "importance_mean": 0.6016,
+          "importance_std": 0.4277
+        },
+        {
+          "feature": "acceleration_0_100_s",
+          "feature_label": "Acceleration 0 100 S",
+          "importance_mean": 0.5159,
+          "importance_std": 0.1505
+        },
+        {
+          "feature": "cargo_volume_l",
+          "feature_label": "Cargo Volume L",
+          "importance_mean": 0.0694,
+          "importance_std": 0.0706
+        },
+        {
+          "feature": "length_mm",
+          "feature_label": "Length Mm",
+          "importance_mean": 0.0482,
+          "importance_std": 0.1231
+        },
+        {
+          "feature": "fast_charge_port",
+          "feature_label": "Fast Charge Port",
+          "importance_mean": 0.0,
+          "importance_std": 0.0
+        },
+        {
+          "feature": "seats",
+          "feature_label": "Seats",
+          "importance_mean": -0.0217,
+          "importance_std": 0.0658
+        }
+      ],
+      "secondary_type": "Standardized Regression Coefficients",
+      "secondary_importance": [
+        {
+          "feature": "battery_capacity_kWh",
+          "coefficient": 94.699,
+          "abs_magnitude": 94.699
+        },
+        {
+          "feature": "brand_Lucid",
+          "coefficient": 86.4809,
+          "abs_magnitude": 86.4809
+        },
+        {
+          "feature": "brand_Tesla",
+          "coefficient": 48.2525,
+          "abs_magnitude": 48.2525
+        },
+        {
+          "feature": "brand_Skoda",
+          "coefficient": 41.3279,
+          "abs_magnitude": 41.3279
+        },
+        {
+          "feature": "brand_NIO",
+          "coefficient": 40.2302,
+          "abs_magnitude": 40.2302
+        },
+        {
+          "feature": "brand_Maserati",
+          "coefficient": -33.0792,
+          "abs_magnitude": 33.0792
+        },
+        {
+          "feature": "brand_Volkswagen",
+          "coefficient": 32.8942,
+          "abs_magnitude": 32.8942
+        },
+        {
+          "feature": "brand_Mazda",
+          "coefficient": -30.7426,
+          "abs_magnitude": 30.7426
+        },
+        {
+          "feature": "brand_Lexus",
+          "coefficient": 29.3174,
+          "abs_magnitude": 29.3174
+        },
+        {
+          "feature": "height_mm",
+          "coefficient": -28.5286,
+          "abs_magnitude": 28.5286
+        },
+        {
+          "feature": "brand_Dacia",
+          "coefficient": -26.9515,
+          "abs_magnitude": 26.9515
+        },
+        {
+          "feature": "brand_Genesis",
+          "coefficient": -24.6605,
+          "abs_magnitude": 24.6605
+        },
+        {
+          "feature": "brand_Lotus",
+          "coefficient": -24.0149,
+          "abs_magnitude": 24.0149
+        },
+        {
+          "feature": "segment_JC - Medium",
+          "coefficient": 23.6141,
+          "abs_magnitude": 23.6141
+        },
+        {
+          "feature": "car_body_type_Coupe",
+          "coefficient": 22.5776,
+          "abs_magnitude": 22.5776
+        }
+      ],
+      "note": "Permutation importance measures drop in performance when a feature is shuffled on held-out test data, reflecting genuine generalizable reliance. Impurity-based importance measures splits in the training set and can be biased toward high-cardinality features."
+    },
+    "Random Forest": {
+      "model_name": "Random Forest",
+      "primary_permutation_test_set": [
+        {
+          "feature": "battery_capacity_kWh",
+          "feature_label": "Battery Capacity Kwh",
+          "importance_mean": 100.0931,
+          "importance_std": 5.7038
+        },
+        {
+          "feature": "height_mm",
+          "feature_label": "Height Mm",
+          "importance_mean": 16.1952,
+          "importance_std": 1.5085
+        },
+        {
+          "feature": "efficiency_wh_per_km",
+          "feature_label": "Efficiency Wh Per Km",
+          "importance_mean": 4.8767,
+          "importance_std": 0.7491
+        },
+        {
+          "feature": "fast_charging_power_kw_dc",
+          "feature_label": "Fast Charging Power Kw Dc",
+          "importance_mean": 4.6718,
+          "importance_std": 0.3942
+        },
+        {
+          "feature": "top_speed_kmh",
+          "feature_label": "Top Speed Kmh",
+          "importance_mean": 2.9483,
+          "importance_std": 1.0076
+        },
+        {
+          "feature": "car_body_type",
+          "feature_label": "Car Body Type",
+          "importance_mean": 1.2864,
+          "importance_std": 0.542
+        },
+        {
+          "feature": "segment",
+          "feature_label": "Segment",
+          "importance_mean": 0.8715,
+          "importance_std": 0.4291
+        },
+        {
+          "feature": "torque_nm",
+          "feature_label": "Torque Nm",
+          "importance_mean": 0.8564,
+          "importance_std": 0.2424
+        },
+        {
+          "feature": "acceleration_0_100_s",
+          "feature_label": "Acceleration 0 100 S",
+          "importance_mean": 0.7096,
+          "importance_std": 0.317
+        },
+        {
+          "feature": "number_of_cells",
+          "feature_label": "Number Of Cells",
+          "importance_mean": 0.6948,
+          "importance_std": 0.2814
+        },
+        {
+          "feature": "length_mm",
+          "feature_label": "Length Mm",
+          "importance_mean": 0.6553,
+          "importance_std": 0.1943
+        },
+        {
+          "feature": "cargo_volume_l",
+          "feature_label": "Cargo Volume L",
+          "importance_mean": 0.5342,
+          "importance_std": 0.3259
+        },
+        {
+          "feature": "width_mm",
+          "feature_label": "Width Mm",
+          "importance_mean": 0.4443,
+          "importance_std": 0.1901
+        },
+        {
+          "feature": "towing_capacity_kg",
+          "feature_label": "Towing Capacity Kg",
+          "importance_mean": 0.2075,
+          "importance_std": 0.084
+        },
+        {
+          "feature": "brand",
+          "feature_label": "Brand",
+          "importance_mean": 0.1781,
+          "importance_std": 0.0673
+        },
+        {
+          "feature": "seats",
+          "feature_label": "Seats",
+          "importance_mean": 0.1011,
+          "importance_std": 0.0408
+        },
+        {
+          "feature": "drivetrain",
+          "feature_label": "Drivetrain",
+          "importance_mean": 0.0836,
+          "importance_std": 0.0572
+        },
+        {
+          "feature": "fast_charge_port",
+          "feature_label": "Fast Charge Port",
+          "importance_mean": 0.0,
+          "importance_std": 0.0
+        }
+      ],
+      "secondary_type": "MDI (Mean Decrease in Impurity)",
+      "secondary_importance": [
+        {
+          "feature": "battery_capacity_kWh",
+          "importance": 0.7623
+        },
+        {
+          "feature": "height_mm",
+          "importance": 0.0756
+        },
+        {
+          "feature": "top_speed_kmh",
+          "importance": 0.0322
+        },
+        {
+          "feature": "fast_charging_power_kw_dc",
+          "importance": 0.0316
+        },
+        {
+          "feature": "efficiency_wh_per_km",
+          "importance": 0.0221
+        },
+        {
+          "feature": "acceleration_0_100_s",
+          "importance": 0.0152
+        },
+        {
+          "feature": "length_mm",
+          "importance": 0.0115
+        },
+        {
+          "feature": "cargo_volume_l",
+          "importance": 0.006
+        },
+        {
+          "feature": "width_mm",
+          "importance": 0.0051
+        },
+        {
+          "feature": "torque_nm",
+          "importance": 0.0044
+        },
+        {
+          "feature": "segment_F - Luxury",
+          "importance": 0.0043
+        },
+        {
+          "feature": "segment_N - Passenger Van",
+          "importance": 0.0043
+        },
+        {
+          "feature": "car_body_type_Small Passenger Van",
+          "importance": 0.0043
+        },
+        {
+          "feature": "car_body_type_Sedan",
+          "importance": 0.0038
+        },
+        {
+          "feature": "towing_capacity_kg",
+          "importance": 0.0033
+        }
+      ],
+      "note": "Permutation importance measures drop in performance when a feature is shuffled on held-out test data, reflecting genuine generalizable reliance. Impurity-based importance measures splits in the training set and can be biased toward high-cardinality features."
+    },
+    "Gradient Boosting": {
+      "model_name": "Gradient Boosting",
+      "primary_permutation_test_set": [
+        {
+          "feature": "battery_capacity_kWh",
+          "feature_label": "Battery Capacity Kwh",
+          "importance_mean": 109.357,
+          "importance_std": 5.7669
+        },
+        {
+          "feature": "height_mm",
+          "feature_label": "Height Mm",
+          "importance_mean": 17.771,
+          "importance_std": 0.9907
+        },
+        {
+          "feature": "efficiency_wh_per_km",
+          "feature_label": "Efficiency Wh Per Km",
+          "importance_mean": 9.4445,
+          "importance_std": 1.0715
+        },
+        {
+          "feature": "fast_charging_power_kw_dc",
+          "feature_label": "Fast Charging Power Kw Dc",
+          "importance_mean": 2.5039,
+          "importance_std": 0.4705
+        },
+        {
+          "feature": "car_body_type",
+          "feature_label": "Car Body Type",
+          "importance_mean": 1.7215,
+          "importance_std": 0.8188
+        },
+        {
+          "feature": "top_speed_kmh",
+          "feature_label": "Top Speed Kmh",
+          "importance_mean": 1.4108,
+          "importance_std": 0.8119
+        },
+        {
+          "feature": "torque_nm",
+          "feature_label": "Torque Nm",
+          "importance_mean": 1.2391,
+          "importance_std": 0.2478
+        },
+        {
+          "feature": "segment",
+          "feature_label": "Segment",
+          "importance_mean": 1.088,
+          "importance_std": 0.8141
+        },
+        {
+          "feature": "number_of_cells",
+          "feature_label": "Number Of Cells",
+          "importance_mean": 0.9112,
+          "importance_std": 0.18
+        },
+        {
+          "feature": "width_mm",
+          "feature_label": "Width Mm",
+          "importance_mean": 0.8054,
+          "importance_std": 0.1681
+        },
+        {
+          "feature": "drivetrain",
+          "feature_label": "Drivetrain",
+          "importance_mean": 0.463,
+          "importance_std": 0.1626
+        },
+        {
+          "feature": "cargo_volume_l",
+          "feature_label": "Cargo Volume L",
+          "importance_mean": 0.4608,
+          "importance_std": 0.6961
+        },
+        {
+          "feature": "acceleration_0_100_s",
+          "feature_label": "Acceleration 0 100 S",
+          "importance_mean": 0.3488,
+          "importance_std": 0.175
+        },
+        {
+          "feature": "brand",
+          "feature_label": "Brand",
+          "importance_mean": 0.3391,
+          "importance_std": 0.2206
+        },
+        {
+          "feature": "length_mm",
+          "feature_label": "Length Mm",
+          "importance_mean": 0.3095,
+          "importance_std": 0.1922
+        },
+        {
+          "feature": "towing_capacity_kg",
+          "feature_label": "Towing Capacity Kg",
+          "importance_mean": 0.0486,
+          "importance_std": 0.0741
+        },
+        {
+          "feature": "seats",
+          "feature_label": "Seats",
+          "importance_mean": 0.0085,
+          "importance_std": 0.0305
+        },
+        {
+          "feature": "fast_charge_port",
+          "feature_label": "Fast Charge Port",
+          "importance_mean": 0.0,
+          "importance_std": 0.0
+        }
+      ],
+      "secondary_type": "MDI (Mean Decrease in Impurity)",
+      "secondary_importance": [
+        {
+          "feature": "battery_capacity_kWh",
+          "importance": 0.7805
+        },
+        {
+          "feature": "height_mm",
+          "importance": 0.0815
+        },
+        {
+          "feature": "efficiency_wh_per_km",
+          "importance": 0.0318
+        },
+        {
+          "feature": "top_speed_kmh",
+          "importance": 0.0277
+        },
+        {
+          "feature": "fast_charging_power_kw_dc",
+          "importance": 0.0258
+        },
+        {
+          "feature": "car_body_type_Small Passenger Van",
+          "importance": 0.0083
+        },
+        {
+          "feature": "length_mm",
+          "importance": 0.0074
+        },
+        {
+          "feature": "car_body_type_Sedan",
+          "importance": 0.0065
+        },
+        {
+          "feature": "segment_N - Passenger Van",
+          "importance": 0.0056
+        },
+        {
+          "feature": "cargo_volume_l",
+          "importance": 0.0055
+        },
+        {
+          "feature": "torque_nm",
+          "importance": 0.0045
+        },
+        {
+          "feature": "missingindicator_number_of_cells",
+          "importance": 0.0028
+        },
+        {
+          "feature": "number_of_cells",
+          "importance": 0.0022
+        },
+        {
+          "feature": "segment_JB - Compact",
+          "importance": 0.0016
+        },
+        {
+          "feature": "acceleration_0_100_s",
+          "importance": 0.0014
+        }
+      ],
+      "note": "Permutation importance measures drop in performance when a feature is shuffled on held-out test data, reflecting genuine generalizable reliance. Impurity-based importance measures splits in the training set and can be biased toward high-cardinality features."
+    }
+  }
+}

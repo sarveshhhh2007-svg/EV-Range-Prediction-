@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#59171B">
+  <meta name="description" content="Comparative Analysis of Machine Learning Regression Models for Electric Vehicle Driving-Range Prediction. Built with Flask, Scikit-learn, and Vanilla JS.">
+  <title>EV Range Prediction & ML Analytics Platform | SRMIST CLA-2</title>
+
+  <!-- Favicon with Burgundy-Peach Theme -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2359171B'/><circle cx='16' cy='16' r='8' fill='%23FED7B8'/></svg>">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <!-- Keyboard Accessible Skip Link -->
+  <a href="#overview" class="skip-link">Skip to main content</a>
+
+  <!-- Mobile Header Strip -->
+  <header class="mobile-header" aria-label="Mobile Navigation Bar">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="logo-symbol" style="width: 32px; height: 32px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+      </div>
+      <span style="font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 0.95rem; color: var(--burgundy-900);">EV RANGE · ML</span>
+    </div>
+    <button class="menu-toggle-btn" aria-label="Toggle navigation menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+  </header>
+
+  <div class="app-layout">
+    <!-- Desktop & Tablet Sidebar -->
+    <aside class="sidebar" aria-label="Main Navigation">
+      <div class="sidebar-header">
+        <div class="logo-symbol">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h2>EV Range ML</h2>
+          <span>Research Analytics</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#overview" class="nav-link active">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          Overview
+        </a>
+        <a href="#dataset" class="nav-link">
+          <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+          Dataset Explorer
+        </a>
+        <a href="#preprocessing" class="nav-link">
+          <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+          Data Preprocessing
+        </a>
+        <a href="#eda" class="nav-link">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          Exploratory Data Analysis
+        </a>
+        <a href="#laboratory" class="nav-link">
+          <svg viewBox="0 0 24 24"><path d="M10 2v7.31L4.14 20.4a2 2 0 0 0 1.72 2.9h12.28a2 2 0 0 0 1.72-2.9L14 9.31V2"></path></svg>
+          Model Laboratory
+        </a>
+        <a href="#comparison" class="nav-link">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          Model Comparison
+        </a>
+        <a href="#prediction" class="nav-link">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          EV Range Prediction
+        </a>
+        <a href="#results" class="nav-link">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          Results & Conclusion
+        </a>
+        <a href="#info" class="nav-link">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          Project Information
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div><strong>Sarvesh HS</strong></div>
+        <div>RA2411026050213 · Sem V</div>
+        <div>SRMIST Tiruchirappalli</div>
+      </div>
+    </aside>
+
+    <!-- Main Content Stream -->
+    <main class="main-content" id="main-content">
+
+      <!-- =======================================================
+           Section 1: Overview
+           ======================================================= -->
+      <section class="app-section hero-section" id="overview">
+        <div class="hero-container">
+          <div class="hero-text">
+            <div class="hero-meta-badges">
+              <span class="badge badge-peach">CLA-2 Task 3</span>
+              <span class="badge badge-burgundy">SDG 9: Industry & Infrastructure</span>
+              <span class="badge badge-peach" id="hero-status-badge">Loading Models...</span>
+            </div>
+            <h1>Comparative Analysis of Machine Learning Regression Models for Electric Vehicle Driving-Range Prediction</h1>
+            <p class="hero-subtitle">
+              A machine learning platform that analyses electric vehicle specifications, compares three regression models and predicts EV driving range through an interactive interface.
+            </p>
+            <div class="hero-actions">
+              <a href="#prediction" class="btn btn-primary">
+                <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                Launch Prediction Studio
+              </a>
+              <a href="#comparison" class="btn btn-outline-white">
+                View Model Benchmarks
+              </a>
+            </div>
+          </div>
+
+          <!-- Signature Element: Palette Triptych -->
+          <div class="triptych-wrapper" aria-label="Palette Triptych Signature Metric Display">
+            <div class="triptych-bars">
+              <!-- Bar 1: Records -->
+              <div class="triptych-bar bar-1">
+                <span class="bar-tag-top">Records</span>
+                <div class="bar-metric-body">
+                  <span class="bar-metric-number tabular-numbers" id="hero-metric-records" data-count-target="478">0</span>
+                  <span class="bar-metric-label">EV Specs</span>
+                </div>
+                <span class="bar-tag-bottom">#59171B</span>
+              </div>
+
+              <!-- Bar 2: Features + Rotated Label -->
+              <div class="triptych-bar bar-2">
+                <span class="bar-tag-top">Features</span>
+                <span class="bar-rotated-label">EV RANGE · ML</span>
+                <div class="bar-metric-body">
+                  <span class="bar-metric-number tabular-numbers" id="hero-metric-features" data-count-target="18">0</span>
+                  <span class="bar-metric-label">Variables</span>
+                </div>
+                <span class="bar-tag-bottom">#FED7B8</span>
+              </div>
+
+              <!-- Bar 3: Models -->
+              <div class="triptych-bar bar-3">
+                <span class="bar-tag-top">Models</span>
+                <div class="bar-metric-body">
+                  <span class="bar-metric-number tabular-numbers" id="hero-metric-models" data-count-target="3">0</span>
+                  <span class="bar-metric-label">Pipelines</span>
+                </div>
+                <span class="bar-tag-bottom">#59171B</span>
+              </div>
+            </div>
+
+            <div class="triptych-circles">
+              <div class="triptych-circle circle-peach"></div>
+              <div class="triptych-circle circle-burgundy"></div>
+              <div class="triptych-circle circle-peach"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scope Clarification Banner -->
+        <div class="section-container" style="margin-top: 50px;">
+          <div class="scope-banner" style="background: rgba(255, 241, 230, 0.95); box-shadow: var(--shadow-sm);">
+            <div class="scope-banner-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <div class="scope-banner-content">
+              <h4>Scope Clarification & Boundary Enforcement</h4>
+              <p>
+                The target variable is <code>range_km</code>. The platform predicts the <strong>listed laboratory driving range</strong> from technical vehicle specifications.
+                It does <strong>NOT</strong> predict Battery State of Health (SOH), battery degradation over time, remaining battery life, or actual real-world driving range under every adverse weather, topography, or driver condition.
+              </p>
+            </div>
+          </div>
+
+          <!-- Workflow Architecture Diagram -->
+          <div class="workflow-diagram-card">
+            <span class="section-label">End-to-End Analytics Workflow</span>
+            <div class="workflow-steps-grid">
+              <div class="workflow-node">
+                <div class="workflow-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg></div>
+                <span class="workflow-label">1. Dataset Load</span>
+              </div>
+              <div class="workflow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+
+              <div class="workflow-node">
+                <div class="workflow-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"></path></svg></div>
+                <span class="workflow-label">2. Preprocessing</span>
+              </div>
+              <div class="workflow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+
+              <div class="workflow-node">
+                <div class="workflow-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+                <span class="workflow-label">3. Visual EDA</span>
+              </div>
+              <div class="workflow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+
+              <div class="workflow-node">
+                <div class="workflow-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div>
+                <span class="workflow-label">4. 80/20 Split</span>
+              </div>
+              <div class="workflow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+
+              <div class="workflow-node">
+                <div class="workflow-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31L4.14 20.4a2 2 0 0 0 1.72 2.9h12.28a2 2 0 0 0 1.72-2.9L14 9.31V2"></path></svg></div>
+                <span class="workflow-label">5. 3x Training</span>
+              </div>
+              <div class="workflow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+
+              <div class="workflow-node">
+                <div class="workflow-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+                <span class="workflow-label">6. Evaluation</span>
+              </div>
+              <div class="workflow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+
+              <div class="workflow-node">
+                <div class="workflow-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div>
+                <span class="workflow-label">7. Prediction</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================
+           Section 2: Dataset Explorer
+           ======================================================= -->
+      <section class="app-section" id="dataset">
+        <div class="section-container">
+          <div class="section-header">
+            <span class="section-label">Data Exploration & Schema</span>
+            <h2>Dataset Explorer</h2>
+            <p class="section-desc">
+              Inspect the raw and preprocessed EV records. The dataset contains 478 vehicle variants across 22 technical specifications.
+            </p>
+          </div>
+
+          <!-- Dataset Stat Cards -->
+          <div class="card-grid card-grid-4" style="margin-bottom: 28px;">
+            <div class="stat-card">
+              <span class="stat-card-label">Total Records</span>
+              <span class="stat-card-value tabular-numbers">478</span>
+              <span class="stat-card-sub">Electric vehicles (2025 spec)</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card-label">Total Columns</span>
+              <span class="stat-card-value tabular-numbers">22</span>
+              <span class="stat-card-sub">13 numeric, 5 categorical, 4 meta</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card-label">Exact Duplicates</span>
+              <span class="stat-card-value tabular-numbers">0</span>
+              <span class="stat-card-sub">Verified unique records</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card-label">Target Variable</span>
+              <span class="stat-card-value" style="font-size: 1.5rem; color: var(--burgundy-900);">range_km</span>
+              <span class="stat-card-sub">Continuous target (Mean: 393.2 km)</span>
+            </div>
+          </div>
+
+          <!-- Table Toolbar -->
+          <div class="table-toolbar">
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+              <input type="text" id="dataset-search" class="table-search-input" placeholder="Search by brand, model, drivetrain, body type..." aria-label="Search dataset">
+              <button type="button" id="dataset-view-toggle" class="btn btn-secondary" style="padding: 10px 16px;">
+                View: PROCESSED
+              </button>
+              <span class="badge badge-peach" id="table-view-badge">Preprocessed View (Numbers Coerced)</span>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <select id="dataset-page-size" class="field-select" style="padding: 8px 12px;" aria-label="Select rows per page">
+                <option value="10">10 rows per page</option>
+                <option value="25">25 rows per page</option>
+                <option value="50">50 rows per page</option>
+              </select>
+              <a href="/api/dataset/download" class="btn btn-primary" style="padding: 10px 16px; font-size: 0.88rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Download Cleaned CSV
+              </a>
+            </div>
+          </div>
+
+          <!-- Paginated Data Table Container -->
+          <div class="table-responsive" id="dataset-table-container">
+            <div style="padding: 30px; text-align: center; color: var(--ink-muted);">Loading dataset preview from server...</div>
+          </div>
+
+          <div class="table-pagination-controls">
+            <span id="dataset-page-indicator" style="font-size: 0.88rem; color: var(--ink-muted); font-weight: 500;">Page 1 of 48</span>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" id="dataset-prev-page" class="pagination-btn" disabled>← Previous</button>
+              <button type="button" id="dataset-next-page" class="pagination-btn">Next →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================
+           Section 3: Data Preprocessing
+           ======================================================= -->
+      <section class="app-section" id="preprocessing">
+        <div class="section-container">
+          <div class="section-header">
+            <span class="section-label">Pipeline Integrity & Transformation</span>
+            <h2>Data Preprocessing & Target-Leakage Audit</h2>
+            <p class="section-desc">
+              Detailed tracking of transformations, non-destructive imputation pipelines, IQR outlier rationale, and the mandatory target-leakage analysis.
+            </p>
+          </div>
+
+          <!-- Leakage Audit Panel Container -->
+          <div id="leakage-audit-container" style="margin-bottom: 32px;"></div>
+
+          <!-- Cleaning Log Table -->
+          <div style="margin-bottom: 36px;">
+            <h3 style="color: var(--burgundy-900); margin-bottom: 12px;">Data Cleaning Log</h3>
+            <div class="table-responsive" id="cleaning-log-container">
+              <div style="padding: 20px; text-align: center;">Loading cleaning log...</div>
+            </div>
+          </div>
+
+          <!-- Outlier Inspection Table -->
+          <div>
+            <h3 style="color: var(--burgundy-900); margin-bottom: 6px;">IQR Outlier Inspection & Justification</h3>
+            <p style="color: var(--ink-muted); font-size: 0.9rem; margin-bottom: 14px;">
+              Extreme high-performance or ultra-long range vehicles (e.g. Lucid Air, Rimac Nevera) were audited. None were deleted, as truncating valid performance records artificially suppresses real physical variance.
+            </p>
+            <div class="table-responsive" id="outliers-table-container">
+              <div style="padding: 20px; text-align: center;">Loading outlier analysis...</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================
+           Section 4: Exploratory Data Analysis
+           ======================================================= -->
+      <section class="app-section" id="eda">
+        <div class="section-container">
+          <div class="section-header">
+            <span class="section-label">Statistical Exploration</span>
+            <h2>Exploratory Data Analysis</h2>
+            <p class="section-desc">
+              Interactive distribution analysis and bivariate specifications. Every number and plot is generated directly from the EV dataset.
+            </p>
+          </div>
+
+          <!-- Two-column Chart Layout -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 28px; margin-bottom: 36px;">
+            <!-- Chart 1: Distribution Histogram -->
+            <div class="card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="color: var(--burgundy-900);">Driving Range Distribution</h3>
+                <span class="badge badge-peach">Target: range_km</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 14px;">
+                Binned vehicle frequency showing slight right-skew with peak concentration between 350 km and 450 km.
+              </p>
+              <div style="position: relative; height: 300px;">
+                <canvas id="chart-distribution" aria-label="Histogram of driving range distribution"></canvas>
+              </div>
+              <div id="chart-distribution-table" style="margin-top: 14px; max-height: 180px; overflow-y: auto;"></div>
+            </div>
+
+            <!-- Chart 2: Interactive Scatter Plot with Feature Selector -->
+            <div class="card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                <h3 style="color: var(--burgundy-900);">Bivariate Scatter Plot</h3>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label for="scatter-feature-select" style="font-size: 0.8rem; font-weight: 700; color: var(--ink-muted);">X-Axis:</label>
+                  <select id="scatter-feature-select" class="field-select" style="padding: 6px 10px; font-size: 0.85rem;">
+                    <option value="battery_capacity_kWh" selected>Battery Capacity (kWh)</option>
+                    <option value="top_speed_kmh">Top Speed (km/h)</option>
+                    <option value="acceleration_0_100_s">0-100 Acceleration (s)</option>
+                    <option value="torque_nm">Motor Torque (Nm)</option>
+                    <option value="fast_charging_power_kw_dc">Fast Charging (kW DC)</option>
+                    <option value="cargo_volume_l">Cargo Volume (L)</option>
+                  </select>
+                </div>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 14px;">
+                Scatter points representing individual EV models with interactive tooltip inspection.
+              </p>
+              <div style="position: relative; height: 300px;">
+                <canvas id="chart-scatter" aria-label="Interactive scatter plot of technical feature vs driving range"></canvas>
+              </div>
+              <div id="chart-scatter-table" style="margin-top: 14px; max-height: 180px; overflow-y: auto;"></div>
+            </div>
+          </div>
+
+          <!-- Descriptive Statistics Table -->
+          <div>
+            <h3 style="color: var(--burgundy-900); margin-bottom: 6px;">Descriptive Statistics & Covariance with Range</h3>
+            <p style="color: var(--ink-muted); font-size: 0.9rem; margin-bottom: 14px;">
+              Summary metrics computed for all candidate numerical features, including dispersion quartiles and covariance with listed range.
+            </p>
+            <div class="table-responsive" id="eda-stats-table-container">
+              <div style="padding: 20px; text-align: center;">Loading descriptive statistics...</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================
+           Section 5: Model Laboratory
+           ======================================================= -->
+      <section class="app-section" id="laboratory">
+        <div class="section-container">
+          <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px;">
+            <div>
+              <span class="section-label">Model Architecture & Training</span>
+              <h2>Model Laboratory</h2>
+              <p class="section-desc">
+                Three supervised regression models trained on an identical 80/20 train/test split. Preprocessing is encapsulated strictly inside scikit-learn pipelines.
+              </p>
+            </div>
+            <div>
+              <button type="button" id="btn-open-retrain-modal" class="btn btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path></svg>
+                Retrain Models
+              </button>
+            </div>
+          </div>
+
+          <!-- Training Progress Notification Box -->
+          <div id="retrain-progress-box" class="card" style="display: none; border-left: 4px solid var(--burgundy-700); background: var(--peach-200); margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div class="logo-symbol" style="width: 28px; height: 28px; animation: spin 2s linear infinite;">⟳</div>
+              <div>
+                <strong>Background Retraining in Progress...</strong>
+                <p id="retrain-progress-text" style="font-size: 0.88rem; color: var(--ink-muted); margin: 2px 0 0;">Preparing data pipelines...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Three Model Cards Container -->
+          <div class="card-grid card-grid-3" id="models-cards-container">
+            <div style="padding: 30px; text-align: center; color: var(--ink-muted);">Loading model pipelines...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Retraining Confirmation Modal -->
+      <div class="modal-backdrop" id="retrain-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-dialog">
+          <h3 class="modal-title" id="modal-title">Confirm Model Retraining</h3>
+          <p style="color: var(--ink); margin-bottom: 16px;">
+            Retraining will execute cross-validation hyperparameter searches (GridSearchCV) for Random Forest and Gradient Boosting across 382 training records, re-evaluate all pipelines on the held-out test set, and overwrite saved <code>.joblib</code> artifacts.
+          </p>
+          <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 24px;">
+            This process executes in a background thread with safe lock concurrency controls and takes approximately 1 to 2 minutes on standard hardware.
+          </p>
+          <div style="display: flex; justify-content: flex-end; gap: 12px;">
+            <button type="button" id="btn-cancel-retrain" class="btn btn-secondary">Cancel</button>
+            <button type="button" id="btn-confirm-retrain" class="btn btn-primary">Proceed with Retraining</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- =======================================================
+           Section 6: Model Comparison
+           ======================================================= -->
+      <section class="app-section" id="comparison">
+        <div class="section-container">
+          <div class="section-header">
+            <span class="section-label">Rigorous Benchmarks</span>
+            <h2>Model Comparison & Ablations</h2>
+            <p class="section-desc">
+              Real evaluation on the untouched 20% test set (96 records) alongside 5-fold cross-validation and unseen-brand generalization tests.
+            </p>
+          </div>
+
+          <!-- Recommendation Banner -->
+          <div id="model-recommendation-box" style="margin-bottom: 30px;"></div>
+
+          <!-- Metrics Table -->
+          <div style="margin-bottom: 32px;">
+            <h3 style="color: var(--burgundy-900); margin-bottom: 12px;">Held-Out Test Set Performance & Cross-Validation</h3>
+            <div class="table-responsive" id="comparison-metrics-table-container">
+              <div style="padding: 20px; text-align: center;">Loading evaluation metrics...</div>
+            </div>
+          </div>
+
+          <!-- Comparison Bar Chart -->
+          <div class="card" style="margin-bottom: 36px;">
+            <h3 style="color: var(--burgundy-900); margin-bottom: 6px;">Error Metric Comparison (MAE & RMSE)</h3>
+            <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 14px;">
+              Direct visual comparison of error penalties on the held-out test set. Lower bars indicate superior precision.
+            </p>
+            <div style="position: relative; height: 320px;">
+              <canvas id="chart-comparison" aria-label="Bar chart comparing MAE and RMSE across models"></canvas>
+            </div>
+          </div>
+
+          <!-- Ablations & Feature Importance Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 28px;">
+            <!-- Ablations Table -->
+            <div class="card">
+              <h3 style="color: var(--burgundy-900); margin-bottom: 6px;">Mandatory Feature Ablation Studies</h3>
+              <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 14px;">
+                Evaluating model sensitivity when battery cell counts or efficiency ratings are omitted.
+              </p>
+              <div class="table-responsive" id="ablations-table-container">
+                <div style="padding: 15px; text-align: center;">Loading ablation study...</div>
+              </div>
+            </div>
+
+            <!-- Permutation Feature Importance Table -->
+            <div class="card">
+              <h3 style="color: var(--burgundy-900); margin-bottom: 6px;">Permutation Feature Importance (Test Set)</h3>
+              <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 14px;">
+                Permutation importance measures drop in performance when a feature is shuffled on held-out test data.
+              </p>
+              <div class="table-responsive" id="feature-importance-container">
+                <div style="padding: 15px; text-align: center;">Loading importance ranks...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================
+           Section 7: EV Range Prediction Studio
+           ======================================================= -->
+      <section class="app-section" id="prediction">
+        <div class="section-container">
+          <div class="section-header">
+            <span class="section-label">Interactive Inference</span>
+            <h2>EV Driving-Range Prediction Studio</h2>
+            <p class="section-desc">
+              Enter vehicle specifications to generate live driving-range estimates across all three trained models. Form inputs are validated strictly against domain boundaries.
+            </p>
+          </div>
+
+          <div class="prediction-studio-grid">
+            <!-- Form Area (Built Dynamically from Schema) -->
+            <div id="prediction-form-container">
+              <div style="padding: 30px; text-align: center; color: var(--ink-muted);">Building dynamic input form...</div>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="prediction-results-card" id="prediction-results-container">
+              <div class="result-hero-box" style="background: var(--peach-200); color: var(--burgundy-900);">
+                <span class="result-hero-badge" style="background: var(--peach-300); color: var(--burgundy-950);">Ready for Inference</span>
+                <div style="display: flex; align-items: baseline; justify-content: center;">
+                  <span class="result-hero-number" style="font-size: 2.8rem; color: var(--burgundy-900);">— —</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--ink-muted); margin: 6px 0 0;">Fill specifications or load test vehicle to predict</p>
+              </div>
+
+              <div class="scope-banner" style="margin: 0; background: var(--peach-50);">
+                <div class="scope-banner-content">
+                  <h4>Prediction Workflow</h4>
+                  <p style="font-size: 0.82rem;">
+                    1. Fill at least Battery Capacity.<br>
+                    2. Unspecified fields are automatically handled by trained median/modal imputers.<br>
+                    3. Compare predictions from all 3 regression architectures.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================
+           Section 8: Results & Conclusion
+           ======================================================= -->
+      <section class="app-section" id="results">
+        <div class="section-container">
+          <div class="section-header">
+            <span class="section-label">Synthesis & Takeaways</span>
+            <h2>Results & Conclusion</h2>
+            <p class="section-desc">
+              Scientific interpretation of experimental findings, model selection trade-offs, target leakage takeaways, and domain limitations.
+            </p>
+          </div>
+
+          <div class="card-grid card-grid-3" style="margin-bottom: 28px;">
+            <div class="card">
+              <h4 style="color: var(--burgundy-900); margin-bottom: 8px;">Key EDA Findings</h4>
+              <p style="font-size: 0.9rem; color: var(--ink-muted);">
+                Battery capacity exhibits the strongest positive Pearson correlation (r = +0.880) with driving range, followed by top speed (+0.732) and charging power (+0.721). Acceleration time has a strong inverse correlation (-0.712).
+              </p>
+            </div>
+            <div class="card">
+              <h4 style="color: var(--burgundy-900); margin-bottom: 8px;">Target Leakage Insight</h4>
+              <p style="font-size: 0.9rem; color: var(--ink-muted);">
+                Physical implied range relates mathematically to battery capacity and efficiency. The ablation confirmed that even without efficiency, models maintain R² &gt; 0.95 purely from battery capacity, aerodynamics, and drivetrain dynamics.
+              </p>
+            </div>
+            <div class="card">
+              <h4 style="color: var(--burgundy-900); margin-bottom: 8px;">Model Recommendation</h4>
+              <p style="font-size: 0.9rem; color: var(--ink-muted);">
+                Linear Regression achieved the lowest 5-fold cross-validation RMSE (17.76 km), slightly outperforming Gradient Boosting (18.85 km) with superior training efficiency and transparent coefficients.
+              </p>
+            </div>
+          </div>
+
+          <div class="card" style="border-left: 4px solid var(--burgundy-900);">
+            <h4 style="color: var(--burgundy-900); margin-bottom: 8px;">Limitations & Future Scope</h4>
+            <ul style="margin-left: 20px; font-size: 0.9rem; color: var(--ink-muted); line-height: 1.6;">
+              <li><strong>Ambient Thermal Effects:</strong> Dataset reflects laboratory homologation cycles (WLTP/EPA) at 20-23°C; winter HVAC heating draw is unrepresented.</li>
+              <li><strong>Battery Chemistry Variations:</strong> All 478 records utilize Lithium-ion chemistries; emerging solid-state or LFP variations cannot be uniquely isolated without chemistry sub-tags.</li>
+              <li><strong>Driver Aggressiveness:</strong> Real-world driving patterns (speed, aggressive braking, payload) differ from standardized test cycle profiles.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================
+           Section 9: Project Information
+           ======================================================= -->
+      <section class="app-section" id="info">
+        <div class="section-container">
+          <div class="section-header">
+            <span class="section-label">Academic Identity & Design System</span>
+            <h2>Project Information & Assessment Details</h2>
+            <p class="section-desc">
+              Continuous Learning Assessment 2 (CLA-2), Task 3 — Case-Based Implementation for Machine Learning.
+            </p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 28px; margin-bottom: 32px;">
+            <!-- Academic Credentials Card -->
+            <div class="card">
+              <h3 style="color: var(--burgundy-900); margin-bottom: 12px;">Student & Academic Information</h3>
+              <table class="data-table">
+                <tbody>
+                  <tr><td><strong>Student Name:</strong></td><td>Sarvesh HS</td></tr>
+                  <tr><td><strong>Register Number:</strong></td><td>RA2411026050213</td></tr>
+                  <tr><td><strong>Institution:</strong></td><td>SRM Institute of Science and Technology, Tiruchirappalli</td></tr>
+                  <tr><td><strong>Programme:</strong></td><td>B.Tech CSE — Artificial Intelligence and Machine Learning</td></tr>
+                  <tr><td><strong>Semester:</strong></td><td>Semester V</td></tr>
+                  <tr><td><strong>Course:</strong></td><td>Machine Learning (21CSC305P)</td></tr>
+                  <tr><td><strong>Assessment:</strong></td><td>Continuous Learning Assessment 2 (CLA-2)</td></tr>
+                  <tr><td><strong>Task:</strong></td><td>Task 3 — Case-Based Implementation</td></tr>
+                  <tr><td><strong>Application Domain:</strong></td><td>Electric Vehicles / Transportation</td></tr>
+                  <tr><td><strong>Primary SDG:</strong></td><td>SDG 9 — Industry, Innovation and Infrastructure</td></tr>
+                  <tr><td><strong>Secondary SDG:</strong></td><td>SDG 7 — Affordable and Clean Energy</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Team Placeholders Block (Strictly Formatted) -->
+            <div class="card">
+              <h3 style="color: var(--burgundy-900); margin-bottom: 10px;">Collaborative Team Contribution Block</h3>
+              <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 14px;">
+                Per assessment guidelines for a 3-member team. Editable placeholders provided below:
+              </p>
+              
+              <div style="background: var(--peach-50); border: 1px dashed var(--line-strong); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px;">
+                <strong>Lead Contributor:</strong> Sarvesh HS (RA2411026050213)<br>
+                <span style="font-size: 0.82rem; color: var(--ink-muted);">Contribution: ML pipeline architecture, data preprocessing, model tuning, Flask REST API, frontend design system, and full-stack integration.</span>
+              </div>
+
+              <div style="background: var(--peach-50); border: 1px dashed var(--line-strong); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px;">
+                <strong>[Team Member 2 — Name]:</strong> [Register No.]<br>
+                <span style="font-size: 0.82rem; color: var(--ink-muted);">[Individual contribution: Literature review, exploratory data analysis documentation, and comparative evaluation analysis.]</span>
+              </div>
+
+              <div style="background: var(--peach-50); border: 1px dashed var(--line-strong); border-radius: var(--radius-sm); padding: 14px;">
+                <strong>[Team Member 3 — Name]:</strong> [Register No.]<br>
+                <span style="font-size: 0.82rem; color: var(--ink-muted);">[Individual contribution: SDG alignment analysis, viva demonstration preparation, and technical report drafting.]</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Viva Demonstration Checklist & Palette Specification -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 28px;">
+            <div class="card">
+              <h3 style="color: var(--burgundy-900); margin-bottom: 10px;">Viva Demonstration Checklist</h3>
+              <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 12px;">Step-by-step walkthrough for faculty examination:</p>
+              <ol style="margin-left: 20px; font-size: 0.88rem; color: var(--ink); line-height: 1.7;">
+                <li><strong>Dataset Integrity:</strong> Show SHA-256 hash in Overview and 478 records with 0 exact duplicates.</li>
+                <li><strong>Target Leakage Audit:</strong> Highlight the <code>implied_range</code> calculation and explain the physical relationship with efficiency.</li>
+                <li><strong>Ablation Analysis:</strong> Demonstrate cross-validation RMSE with and without <code>number_of_cells</code> and <code>efficiency_wh_per_km</code>.</li>
+                <li><strong>Live Prediction:</strong> Click "Load Test Set Example EV" to populate real test parameters, execute inference, and contrast against actual listed range.</li>
+                <li><strong>Model Comparison:</strong> Explain why Linear Regression was selected using cross-validation RMSE rather than test-set bias.</li>
+              </ol>
+            </div>
+
+            <!-- Design System Palette Card -->
+            <div class="card">
+              <h3 style="color: var(--burgundy-900); margin-bottom: 10px;">Design System & Color Tokens</h3>
+              <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 14px;">
+                Strict adherence to the reference mesh palette with no blue, cyan, or green hues:
+              </p>
+              
+              <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
+                <div style="width: 32px; height: 32px; border-radius: 6px; background: #59171B; box-shadow: var(--shadow-sm);"></div>
+                <div><strong>Deep Burgundy</strong>: <code>#59171B</code> (Primary Brand & End-caps)</div>
+              </div>
+
+              <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
+                <div style="width: 32px; height: 32px; border-radius: 6px; background: #FED7B8; border: 1px solid var(--line); box-shadow: var(--shadow-sm);"></div>
+                <div><strong>Warm Peach Beige</strong>: <code>#FED7B8</code> (Surface Highlights & Accents)</div>
+              </div>
+
+              <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
+                <div style="width: 32px; height: 32px; border-radius: 6px; background: #8B4947; box-shadow: var(--shadow-sm);"></div>
+                <div><strong>Rosy Brown Blend</strong>: <code>#8B4947</code> (Supporting Center Transition)</div>
+              </div>
+
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div style="width: 32px; height: 32px; border-radius: 6px; background: #3A0E11; box-shadow: var(--shadow-sm);"></div>
+                <div><strong>Burgundy Ink</strong>: <code>#3A0E11</code> (High-contrast WCAG AA Body Text)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Back to Top Button -->
+      <button type="button" class="back-to-top" aria-label="Back to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
+
+      <!-- Toast Notification Container -->
+      <div class="toast-container" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <!-- Vendored Local Chart.js (Works 100% Offline) -->
+  <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+
+  <!-- Modular Vanilla JavaScript Application -->
+  <script type="module" src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
+
