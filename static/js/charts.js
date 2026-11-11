@@ -4,6 +4,8 @@
  * Strictly uses the Burgundy & Peach palette.
  */
 
+import { fetchJson } from "./apiClient.js?v=3.0";
+
 const PALETTE = {
   burgundy: '#59171B',
   rose: '#8B4947',
@@ -17,9 +19,8 @@ export async function initInsightsCharts() {
   if (!window.Chart) return;
 
   try {
-    const res = await fetch('/api/insights');
-    if (!res.ok) return;
-    const data = await res.json();
+    const data = await fetchJson('/api/insights');
+    if (!data) return;
 
     // 1. Driving Range Distribution (Histogram)
     const ctxDist = document.getElementById('chart-distribution');
@@ -179,9 +180,8 @@ export async function initModelsCharts() {
   if (!window.Chart) return;
 
   try {
-    const res = await fetch('/api/models/metrics');
-    if (!res.ok) return;
-    const data = await res.json();
+    const data = await fetchJson('/api/models/metrics');
+    if (!data) return;
 
     // 1. MAE Comparison Bar Chart
     const ctxMae = document.getElementById('chart-mae-compare');

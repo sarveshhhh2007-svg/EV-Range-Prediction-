@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#59171B">
-  <meta name="description" content="Predict electric vehicle listed driving range from vehicle specifications using machine learning regression.">
+  <meta name="description"
+    content="Predict electric vehicle listed driving range from vehicle specifications using machine learning regression.">
   <title>EV Range Predictor</title>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2359171B'/><circle cx='16' cy='16' r='8' fill='%23FED7B8'/></svg>">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2359171B'/><circle cx='16' cy='16' r='8' fill='%23FED7B8'/></svg>">
 
   <!-- External Stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v=3.0">
+  <link rel="stylesheet" href="./static/css/styles.css?v=3.0">
 
   <!-- Inline Loading Screen CSS (Loads Immediately Before Other Files) -->
   <style>
@@ -19,8 +22,8 @@
       position: fixed;
       inset: 0;
       background: radial-gradient(120% 95% at 0% 0%, #FED7B8 0%, rgba(254, 215, 184, 0) 62%),
-                  radial-gradient(120% 95% at 100% 100%, #FED7B8 0%, rgba(254, 215, 184, 0) 62%),
-                  linear-gradient(45deg, #59171B 0%, #8B4947 50%, #59171B 100%);
+        radial-gradient(120% 95% at 100% 100%, #FED7B8 0%, rgba(254, 215, 184, 0) 62%),
+        linear-gradient(45deg, #59171B 0%, #8B4947 50%, #59171B 100%);
       z-index: 9999;
       display: flex;
       flex-direction: column;
@@ -30,31 +33,51 @@
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       transition: opacity 500ms cubic-bezier(0.22, 0.61, 0.36, 1);
     }
+
     #loading-screen.fade-out {
       opacity: 0;
       pointer-events: none;
     }
+
     .loader-box {
       text-align: center;
       max-width: 340px;
       padding: 24px;
     }
+
     .scatter-svg {
       width: 150px;
       height: 90px;
       margin-bottom: 16px;
       overflow: visible;
     }
+
     .scatter-dot {
       fill: #FED7B8;
       opacity: 0;
       animation: dotAppear 400ms ease forwards;
     }
-    .scatter-dot:nth-child(1) { animation-delay: 150ms; }
-    .scatter-dot:nth-child(2) { animation-delay: 350ms; }
-    .scatter-dot:nth-child(3) { animation-delay: 550ms; }
-    .scatter-dot:nth-child(4) { animation-delay: 750ms; }
-    .scatter-dot:nth-child(5) { animation-delay: 950ms; }
+
+    .scatter-dot:nth-child(1) {
+      animation-delay: 150ms;
+    }
+
+    .scatter-dot:nth-child(2) {
+      animation-delay: 350ms;
+    }
+
+    .scatter-dot:nth-child(3) {
+      animation-delay: 550ms;
+    }
+
+    .scatter-dot:nth-child(4) {
+      animation-delay: 750ms;
+    }
+
+    .scatter-dot:nth-child(5) {
+      animation-delay: 950ms;
+    }
+
     .regression-line {
       stroke: #FED7B8;
       stroke-width: 2.5;
@@ -64,19 +87,32 @@
       animation: drawLine 600ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
       animation-delay: 1100ms;
     }
+
     @keyframes dotAppear {
-      from { opacity: 0; transform: scale(0.4); }
-      to { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(0.4);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
+
     @keyframes drawLine {
-      to { stroke-dashoffset: 0; }
+      to {
+        stroke-dashoffset: 0;
+      }
     }
+
     .loader-title {
       font-size: 1.25rem;
       font-weight: 700;
       margin-bottom: 12px;
       color: #FFF9F4;
     }
+
     .loader-bar-track {
       width: 220px;
       height: 4px;
@@ -85,6 +121,7 @@
       margin: 0 auto 12px;
       overflow: hidden;
     }
+
     .loader-bar-fill {
       width: 30%;
       height: 100%;
@@ -92,11 +129,13 @@
       border-radius: 2px;
       transition: width 400ms ease;
     }
+
     .loader-status {
       font-size: 0.88rem;
       color: #FED7B8;
       min-height: 22px;
     }
+
     .loader-retry-btn {
       margin-top: 14px;
       padding: 8px 18px;
@@ -108,13 +147,25 @@
       cursor: pointer;
       display: none;
     }
+
     @media (prefers-reduced-motion: reduce) {
-      .scatter-dot { opacity: 1; animation: none; }
-      .regression-line { stroke-dashoffset: 0; animation: none; }
-      #loading-screen { transition: none; }
+      .scatter-dot {
+        opacity: 1;
+        animation: none;
+      }
+
+      .regression-line {
+        stroke-dashoffset: 0;
+        animation: none;
+      }
+
+      #loading-screen {
+        transition: none;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- =======================================================
@@ -137,7 +188,8 @@
         <div class="loader-bar-fill" id="loader-bar"></div>
       </div>
       <div class="loader-status" id="loader-status">Reading the dataset...</div>
-      <button type="button" class="loader-retry-btn" id="loader-retry-btn" onclick="window.location.reload()">Retry</button>
+      <button type="button" class="loader-retry-btn" id="loader-retry-btn"
+        onclick="window.location.reload()">Retry</button>
     </div>
   </div>
 
@@ -181,7 +233,8 @@
       <div class="container">
         <div class="hero-grid">
           <div class="hero-text">
-            <h1>Comparative Analysis of Machine Learning Regression Models for Electric Vehicle Driving-Range Prediction</h1>
+            <h1>Comparative Analysis of Machine Learning Regression Models for Electric Vehicle Driving-Range Prediction
+            </h1>
             <p class="hero-desc">
               Predicts the listed driving range of electric vehicles based on their technical specifications.
             </p>
@@ -203,7 +256,7 @@
                 <div class="bar-number tabular" id="home-count-cars">478</div>
                 <div class="bar-label">In Dataset</div>
               </div>
-              <span class="bar-tag-bottom">#59171B</span>
+              <span class="bar-tag-bottom"></span>
             </div>
 
             <div class="triptych-bar bar-2">
@@ -212,7 +265,7 @@
                 <div class="bar-number tabular" id="home-count-specs">18</div>
                 <div class="bar-label">Features</div>
               </div>
-              <span class="bar-tag-bottom">#FED7B8</span>
+              <span class="bar-tag-bottom"></span>
             </div>
 
             <div class="triptych-bar bar-3">
@@ -221,7 +274,7 @@
                 <div class="bar-number tabular" id="home-count-models">3</div>
                 <div class="bar-label">Evaluated</div>
               </div>
-              <span class="bar-tag-bottom">#59171B</span>
+              <span class="bar-tag-bottom"></span>
             </div>
           </div>
         </div>
@@ -274,7 +327,8 @@
         </div>
 
         <div class="data-search-bar">
-          <input type="text" id="data-search" class="search-input" placeholder="Search by brand or model name..." aria-label="Search cars">
+          <input type="text" id="data-search" class="search-input" placeholder="Search by brand or model name..."
+            aria-label="Search cars">
           <span style="font-size: 0.88rem; color: var(--muted);" id="data-total-count">478 cars</span>
         </div>
 
@@ -460,14 +514,16 @@
             <div class="chart-canvas-wrap">
               <canvas id="chart-actual-vs-predicted"></canvas>
             </div>
-            <div class="chart-caption" id="caption-actual-pred">Closer to the diagonal line means a better prediction.</div>
+            <div class="chart-caption" id="caption-actual-pred">Closer to the diagonal line means a better prediction.
+            </div>
           </div>
         </div>
 
         <!-- Best Model Sentence & Honest Note -->
         <div class="best-model-callout">
           <p id="best-model-sentence"><strong>Best model: Linear Regression, average error 14.37 km</strong></p>
-          <p id="best-model-reason" style="color: var(--muted); margin-top: 4px;">Chosen because it had the lowest average error when re-tested several times on the training data.</p>
+          <p id="best-model-reason" style="color: var(--muted); margin-top: 4px;">Chosen because it had the lowest
+            average error when re-tested several times on the training data.</p>
           <p class="honest-note">If two models score very close, the difference may not be meaningful.</p>
         </div>
       </div>
@@ -506,7 +562,9 @@
             <!-- Form Actions & Helper Links -->
             <div class="form-actions">
               <button type="submit" class="btn-primary" id="btn-predict-submit">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
                 Predict EV Driving Range
               </button>
               <button type="button" class="btn-secondary" id="link-try-example">
@@ -534,8 +592,9 @@
             </div>
 
             <div class="result-bars-wrap">
-              <h4 style="color: var(--burgundy); font-size: 0.95rem; margin-bottom: 14px;">Comparing All Three Models:</h4>
-              
+              <h4 style="color: var(--burgundy); font-size: 0.95rem; margin-bottom: 14px;">Comparing All Three Models:
+              </h4>
+
               <div class="model-bar-item" id="bar-item-lr">
                 <div class="model-bar-head">
                   <span>Linear Regression</span>
@@ -587,11 +646,12 @@
   </footer>
 
   <!-- Vendored Offline Chart.js -->
-  <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+  <script src="./static/vendor/chart.umd.min.js"></script>
 
   <!-- Simplified Modular JavaScript (3 Files Only) -->
-  <script type="module" src="{{ url_for('static', filename='js/charts.js') }}?v=3.0"></script>
-  <script type="module" src="{{ url_for('static', filename='js/predict.js') }}?v=3.0"></script>
-  <script type="module" src="{{ url_for('static', filename='js/app.js') }}?v=3.0"></script>
+  <script type="module" src="./static/js/charts.js?v=3.0"></script>
+  <script type="module" src="./static/js/predict.js?v=3.0"></script>
+  <script type="module" src="./static/js/app.js?v=3.0"></script>
 </body>
+
 </html>

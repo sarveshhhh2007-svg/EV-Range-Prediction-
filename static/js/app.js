@@ -5,6 +5,7 @@
  */
 
 import { initInsightsCharts, initModelsCharts } from "./charts.js?v=3.0";
+import { fetchJson, getCarsPreview } from "./apiClient.js?v=3.0";
 
 // Global Data Table State
 let currentPage = 1;
@@ -36,17 +37,11 @@ async function initApp() {
     if (loaderStatus) loaderStatus.textContent = "Reading the dataset...";
     if (loaderBar) loaderBar.style.width = "35%";
 
-    // 2. Fetch health & summary
-    const [healthRes, summaryRes] = await Promise.all([
-      fetch("/api/health"),
-      fetch("/api/summary")
-    ]);
-
-    if (!healthRes.ok || !summaryRes.ok) {
-      throw new Error("Backend service unavailable");
+    // 2. Fetch summary
+    const summaryData = await fetchJson("/api/summary");
+    if (!summaryData) {
+      throw new Error("Application data unavailable");
     }
-
-    const summaryData = await summaryRes.json();
     populateSummary(summaryData);
 
     // 3. Update loading progress
@@ -121,10 +116,7 @@ async function loadDataTable(page = 1, search = "") {
   if (!tbody) return;
 
   try {
-    const url = `/api/dataset/preview?page=${page}&search=${encodeURIComponent(search)}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("Failed to load cars");
-    const data = await res.json();
+    const data = await getCarsPreview(page, search, 10);
 
     currentPage = data.page;
     totalPages = data.total_pages;
@@ -163,10 +155,8 @@ async function loadCleaningBullets() {
   if (!listEl) return;
 
   try {
-    const res = await fetch("/api/cleaning");
-    if (!res.ok) return;
-    const data = await res.json();
-    if (Array.isArray(data.bullets) && data.bullets.length > 0) {
+    const data = await fetchJson("/api/cleaning");
+    if (data && Array.isArray(data.bullets) && data.bullets.length > 0) {
       listEl.innerHTML = data.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join("");
     }
   } catch (err) {

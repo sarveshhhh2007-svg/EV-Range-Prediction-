@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#59171B">
+  <meta name="description"
+    content="Predict electric vehicle listed driving range from vehicle specifications using machine learning regression.">
+  <title>EV Range Predictor</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2359171B'/><circle cx='16' cy='16' r='8' fill='%23FED7B8'/></svg>">
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="./static/css/styles.css?v=3.0">
+
+  <!-- Inline Loading Screen CSS (Loads Immediately Before Other Files) -->
+  <style>
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(120% 95% at 0% 0%, #FED7B8 0%, rgba(254, 215, 184, 0) 62%),
+        radial-gradient(120% 95% at 100% 100%, #FED7B8 0%, rgba(254, 215, 184, 0) 62%),
+        linear-gradient(45deg, #59171B 0%, #8B4947 50%, #59171B 100%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #FFF9F4;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      transition: opacity 500ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    #loading-screen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader-box {
+      text-align: center;
+      max-width: 340px;
+      padding: 24px;
+    }
+
+    .scatter-svg {
+      width: 150px;
+      height: 90px;
+      margin-bottom: 16px;
+      overflow: visible;
+    }
+
+    .scatter-dot {
+      fill: #FED7B8;
+      opacity: 0;
+      animation: dotAppear 400ms ease forwards;
+    }
+
+    .scatter-dot:nth-child(1) {
+      animation-delay: 150ms;
+    }
+
+    .scatter-dot:nth-child(2) {
+      animation-delay: 350ms;
+    }
+
+    .scatter-dot:nth-child(3) {
+      animation-delay: 550ms;
+    }
+
+    .scatter-dot:nth-child(4) {
+      animation-delay: 750ms;
+    }
+
+    .scatter-dot:nth-child(5) {
+      animation-delay: 950ms;
+    }
+
+    .regression-line {
+      stroke: #FED7B8;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-dasharray: 160;
+      stroke-dashoffset: 160;
+      animation: drawLine 600ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+      animation-delay: 1100ms;
+    }
+
+    @keyframes dotAppear {
+      from {
+        opacity: 0;
+        transform: scale(0.4);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes drawLine {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .loader-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #FFF9F4;
+    }
+
+    .loader-bar-track {
+      width: 220px;
+      height: 4px;
+      background: rgba(254, 215, 184, 0.25);
+      border-radius: 2px;
+      margin: 0 auto 12px;
+      overflow: hidden;
+    }
+
+    .loader-bar-fill {
+      width: 30%;
+      height: 100%;
+      background: #FED7B8;
+      border-radius: 2px;
+      transition: width 400ms ease;
+    }
+
+    .loader-status {
+      font-size: 0.88rem;
+      color: #FED7B8;
+      min-height: 22px;
+    }
+
+    .loader-retry-btn {
+      margin-top: 14px;
+      padding: 8px 18px;
+      background: #FED7B8;
+      color: #59171B;
+      border: none;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .scatter-dot {
+        opacity: 1;
+        animation: none;
+      }
+
+      .regression-line {
+        stroke-dashoffset: 0;
+        animation: none;
+      }
+
+      #loading-screen {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =======================================================
+       Loading Screen (SVG Scatter & Regression Line)
+       ======================================================= -->
+  <div id="loading-screen" role="progressbar" aria-label="Loading EV Range Predictor application">
+    <div class="loader-box">
+      <svg class="scatter-svg" viewBox="0 0 140 80">
+        <!-- Scatter Points -->
+        <circle class="scatter-dot" cx="20" cy="65" r="4.5" />
+        <circle class="scatter-dot" cx="45" cy="52" r="4.5" />
+        <circle class="scatter-dot" cx="72" cy="42" r="4.5" />
+        <circle class="scatter-dot" cx="98" cy="28" r="4.5" />
+        <circle class="scatter-dot" cx="125" cy="18" r="4.5" />
+        <!-- Regression Line -->
+        <line class="regression-line" x1="12" y1="72" x2="132" y2="12" />
+      </svg>
+      <div class="loader-title">EV Range Predictor</div>
+      <div class="loader-bar-track">
+        <div class="loader-bar-fill" id="loader-bar"></div>
+      </div>
+      <div class="loader-status" id="loader-status">Reading the dataset...</div>
+      <button type="button" class="loader-retry-btn" id="loader-retry-btn"
+        onclick="window.location.reload()">Retry</button>
+    </div>
+  </div>
+
+  <!-- =======================================================
+       Top Navigation Bar (5 Links Only)
+       ======================================================= -->
+  <header class="top-nav">
+    <div class="top-nav-inner">
+      <a href="#home" class="nav-brand">
+        <div class="nav-brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <span>EV Range Predictor</span>
+      </a>
+
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <ul class="nav-links" id="nav-links">
+        <li class="nav-item"><a href="#home" class="active">Home</a></li>
+        <li class="nav-item"><a href="#data">Data</a></li>
+        <li class="nav-item"><a href="#insights">Insights</a></li>
+        <li class="nav-item"><a href="#models">Models</a></li>
+        <li class="nav-item"><a href="#predict">Predict</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- =======================================================
+         Section 1: Home
+         ======================================================= -->
+    <section class="section hero-section" id="home">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-text">
+            <h1>Comparative Analysis of Machine Learning Regression Models for Electric Vehicle Driving-Range Prediction
+            </h1>
+            <p class="hero-desc">
+              Predicts the listed driving range of electric vehicles based on their technical specifications.
+            </p>
+            <div class="hero-note">
+              Predicts the listed range from specifications. It does not predict battery health or real-world range.
+            </div>
+            <div>
+              <a href="#predict" class="btn-primary" style="display: inline-block; text-decoration: none;">
+                Predict Range
+              </a>
+            </div>
+          </div>
+
+          <!-- Decorative Palette Triptych (3 Numbers) -->
+          <div class="triptych" aria-label="Key summary metrics">
+            <div class="triptych-bar bar-1">
+              <span class="bar-tag-top">Cars</span>
+              <div>
+                <div class="bar-number tabular" id="home-count-cars">478</div>
+                <div class="bar-label">In Dataset</div>
+              </div>
+              <span class="bar-tag-bottom"></span>
+            </div>
+
+            <div class="triptych-bar bar-2">
+              <span class="bar-tag-top">Specs</span>
+              <div>
+                <div class="bar-number tabular" id="home-count-specs">18</div>
+                <div class="bar-label">Features</div>
+              </div>
+              <span class="bar-tag-bottom"></span>
+            </div>
+
+            <div class="triptych-bar bar-3">
+              <span class="bar-tag-top">Models</span>
+              <div>
+                <div class="bar-number tabular" id="home-count-models">3</div>
+                <div class="bar-label">Evaluated</div>
+              </div>
+              <span class="bar-tag-bottom"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- How It Works 4-Step Strip -->
+        <div class="how-it-works">
+          <div class="steps-strip">
+            <div class="step-item">
+              <span class="step-num">1</span>
+              <span>Collect data</span>
+            </div>
+            <span class="step-sep">→</span>
+            <div class="step-item">
+              <span class="step-num">2</span>
+              <span>Clean data</span>
+            </div>
+            <span class="step-sep">→</span>
+            <div class="step-item">
+              <span class="step-num">3</span>
+              <span>Train 3 models</span>
+            </div>
+            <span class="step-sep">→</span>
+            <div class="step-item">
+              <span class="step-num">4</span>
+              <span>Predict range</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Best Model & SDG Strip -->
+        <div class="home-summary-box">
+          <div style="font-weight: 700; color: var(--burgundy);" id="home-best-model-banner">
+            Best model: Linear Regression, average error 14.37 km
+          </div>
+          <div class="sdg-badge">
+            SDG 9: Shows how machine learning can analyse EV data to support smarter transport technology.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         Section 2: Data
+         ======================================================= -->
+    <section class="section" id="data">
+      <div class="container">
+        <div class="section-head">
+          <h2>Vehicle Data</h2>
+          <p class="section-caption">Explore the electric vehicles and their technical specifications.</p>
+        </div>
+
+        <div class="data-search-bar">
+          <input type="text" id="data-search" class="search-input" placeholder="Search by brand or model name..."
+            aria-label="Search cars">
+          <span style="font-size: 0.88rem; color: var(--muted);" id="data-total-count">478 cars</span>
+        </div>
+
+        <!-- 6 Columns Table -->
+        <div class="table-wrap">
+          <table class="simple-table" id="cars-table">
+            <thead>
+              <tr>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Battery (kWh)</th>
+                <th>Top Speed (km/h)</th>
+                <th>0–100 km/h (s)</th>
+                <th>Range (km)</th>
+              </tr>
+            </thead>
+            <tbody id="cars-table-body">
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 24px;">Loading cars from dataset...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="section-caption">Showing 10 cars per page with specifications converted to standard units.</p>
+
+        <!-- Pagination -->
+        <div class="table-pagination">
+          <button type="button" class="btn-nav" id="btn-prev-page" disabled>← Previous</button>
+          <span style="font-size: 0.9rem; font-weight: 600;" id="page-indicator">Page 1 of 48</span>
+          <button type="button" class="btn-nav" id="btn-next-page">Next →</button>
+        </div>
+
+        <!-- How We Cleaned the Data Bullets -->
+        <div class="cleaning-bullets">
+          <h4>How we cleaned the data</h4>
+          <ul id="cleaning-bullets-list">
+            <li>The dataset has 478 cars and 22 specs, with no duplicate rows.</li>
+            <li>Filled missing numbers with the middle value (for example, number of cells had 202 missing).</li>
+            <li>Cargo space written as text (like "10 Banana Boxes") was treated as missing.</li>
+            <li>Removed battery type (it is the same for every car).</li>
+            <li>Ignored model name and web link (they only identify a car).</li>
+            <li>Used 80% of cars to learn (382 cars) and 20% to test (96 cars).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         Section 3: Insights (4 Charts Only)
+         ======================================================= -->
+    <section class="section" id="insights">
+      <div class="container">
+        <div class="section-head">
+          <h2>Data Insights</h2>
+          <p class="section-caption">Visual patterns discovered across the electric vehicle dataset.</p>
+        </div>
+
+        <div class="charts-grid">
+          <!-- Chart 1: Range Distribution -->
+          <div class="chart-card">
+            <h4>Driving Range Distribution</h4>
+            <div class="chart-canvas-wrap">
+              <canvas id="chart-distribution"></canvas>
+            </div>
+            <div class="chart-caption" id="caption-distribution">
+              Most cars fall between 350 and 450 km.
+            </div>
+          </div>
+
+          <!-- Chart 2: Battery vs Range -->
+          <div class="chart-card">
+            <h4>Battery Capacity vs Range</h4>
+            <div class="chart-canvas-wrap">
+              <canvas id="chart-battery"></canvas>
+            </div>
+            <div class="chart-caption" id="caption-battery">
+              Cars with larger battery packs generally travel further.
+            </div>
+          </div>
+
+          <!-- Chart 3: Acceleration vs Range -->
+          <div class="chart-card">
+            <h4>Acceleration Time vs Range</h4>
+            <div class="chart-canvas-wrap">
+              <canvas id="chart-acceleration"></canvas>
+            </div>
+            <div class="chart-caption" id="caption-acceleration">
+              Faster-accelerating cars often have larger batteries and longer range.
+            </div>
+          </div>
+
+          <!-- Chart 4: Top 8 Correlations -->
+          <div class="chart-card">
+            <h4>What Moves with Range</h4>
+            <div class="chart-canvas-wrap">
+              <canvas id="chart-correlations"></canvas>
+            </div>
+            <div class="chart-caption" id="caption-correlations">
+              Longer bars mean the two rise or fall together more strongly. This does not prove one causes the other.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         Section 4: Models
+         ======================================================= -->
+    <section class="section" id="models">
+      <div class="container">
+        <div class="section-head">
+          <h2>Model Performance</h2>
+          <p class="section-caption">Comparing the three machine learning models evaluated on test vehicles.</p>
+        </div>
+
+        <!-- Three Short Model Cards -->
+        <div class="models-cards-row">
+          <div class="model-summary-card" id="card-model-lr">
+            <h4>Linear Regression</h4>
+            <p class="model-desc-line">Finds the best straight-line relationship between specs and range.</p>
+          </div>
+          <div class="model-summary-card" id="card-model-rf">
+            <h4>Random Forest</h4>
+            <p class="model-desc-line">Many decision trees each give an estimate; the average is used.</p>
+          </div>
+          <div class="model-summary-card" id="card-model-gb">
+            <h4>Gradient Boosting</h4>
+            <p class="model-desc-line">Trees are built one after another, each fixing the mistakes of the last.</p>
+          </div>
+        </div>
+
+        <!-- Evaluation Results Table -->
+        <div class="table-wrap">
+          <table class="simple-table" id="metrics-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Average error (MAE)</th>
+                <th>Squared error (MSE)</th>
+                <th>Big-miss error (RMSE)</th>
+                <th>Fit score (R²)</th>
+              </tr>
+            </thead>
+            <tbody id="metrics-table-body">
+              <tr>
+                <td><strong>Linear Regression</strong></td>
+                <td>14.37 km</td>
+                <td>317.42 km²</td>
+                <td>17.82 km</td>
+                <td>0.9700</td>
+              </tr>
+              <tr>
+                <td><strong>Random Forest</strong></td>
+                <td>16.13 km</td>
+                <td>527.14 km²</td>
+                <td>22.96 km</td>
+                <td>0.9502</td>
+              </tr>
+              <tr>
+                <td><strong>Gradient Boosting</strong></td>
+                <td>13.94 km</td>
+                <td>366.07 km²</td>
+                <td>19.13 km</td>
+                <td>0.9654</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="section-caption">Tested on 96 cars that the models never saw during training.</p>
+
+        <!-- Visual Benchmarks Row -->
+        <div class="models-visual-row">
+          <div class="chart-card">
+            <h4>Average Error Comparison (MAE)</h4>
+            <div class="chart-canvas-wrap">
+              <canvas id="chart-mae-compare"></canvas>
+            </div>
+            <div class="chart-caption">Lower average error means the model makes closer predictions.</div>
+          </div>
+
+          <div class="chart-card">
+            <h4>Actual vs Predicted (Best Model)</h4>
+            <div class="chart-canvas-wrap">
+              <canvas id="chart-actual-vs-predicted"></canvas>
+            </div>
+            <div class="chart-caption" id="caption-actual-pred">Closer to the diagonal line means a better prediction.
+            </div>
+          </div>
+        </div>
+
+        <!-- Best Model Sentence & Honest Note -->
+        <div class="best-model-callout">
+          <p id="best-model-sentence"><strong>Best model: Linear Regression, average error 14.37 km</strong></p>
+          <p id="best-model-reason" style="color: var(--muted); margin-top: 4px;">Chosen because it had the lowest
+            average error when re-tested several times on the training data.</p>
+          <p class="honest-note">If two models score very close, the difference may not be meaningful.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         Section 5: Predict
+         ======================================================= -->
+    <section class="section" id="predict">
+      <div class="container">
+        <div class="section-head">
+          <h2>Predict EV Driving Range</h2>
+          <p class="section-caption">Enter vehicle specifications to estimate the listed driving range.</p>
+        </div>
+
+        <div class="predict-form-wrap card">
+          <form id="predict-form" novalidate>
+            <!-- Main 6 Inputs (Always Visible) -->
+            <div class="fields-grid-main" id="main-fields-container">
+              <!-- Rendered dynamically by predict.js -->
+            </div>
+
+            <!-- More Details (Optional, Collapsed by Default) -->
+            <div class="details-toggle" id="details-toggle" role="button" tabindex="0">
+              ▶ More details (optional)
+            </div>
+            <div class="details-collapsed" id="details-collapsed">
+              <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 12px;">
+                Leave blank if unknown. Missing values are filled automatically; more details give a closer estimate.
+              </p>
+              <div class="fields-grid-main" id="optional-fields-container">
+                <!-- Rendered dynamically by predict.js -->
+              </div>
+            </div>
+
+            <!-- Form Actions & Helper Links -->
+            <div class="form-actions">
+              <button type="submit" class="btn-primary" id="btn-predict-submit">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                Predict EV Driving Range
+              </button>
+              <button type="button" class="btn-secondary" id="link-try-example">
+                ✦ Try an example
+              </button>
+              <button type="button" class="btn-ghost" id="link-clear-form">
+                Clear
+              </button>
+            </div>
+
+            <!-- Unusual Input Warning (Palette Colours Only) -->
+            <div class="unusual-note" id="unusual-warning">
+              This value is unusual compared with the cars used for training.
+            </div>
+          </form>
+
+          <!-- Result Area (Plain CSS Bars) -->
+          <div class="prediction-result-box" id="prediction-result-box">
+            <div class="result-header">
+              <h3 id="result-best-model-label">Best Model: Linear Regression</h3>
+              <div class="result-big-num">
+                <span id="result-best-value">0</span> <span style="font-size: 1.5rem; font-weight: 500;">km</span>
+              </div>
+              <div style="font-size: 0.88rem; opacity: 0.9;">Estimated listed driving range</div>
+            </div>
+
+            <div class="result-bars-wrap">
+              <h4 style="color: var(--burgundy); font-size: 0.95rem; margin-bottom: 14px;">Comparing All Three Models:
+              </h4>
+
+              <div class="model-bar-item" id="bar-item-lr">
+                <div class="model-bar-head">
+                  <span>Linear Regression</span>
+                  <span id="val-lr">0 km</span>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill" id="fill-lr" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <div class="model-bar-item" id="bar-item-rf">
+                <div class="model-bar-head">
+                  <span>Random Forest</span>
+                  <span id="val-rf">0 km</span>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill" id="fill-rf" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <div class="model-bar-item" id="bar-item-gb">
+                <div class="model-bar-head">
+                  <span>Gradient Boosting</span>
+                  <span id="val-gb">0 km</span>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill" id="fill-gb" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <p class="result-note">
+                These are estimates of listed range, not guaranteed real-world range.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =======================================================
+       Footer (Project Title & One-Line Note Only)
+       ======================================================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-title">EV Range Predictor</div>
+      <div class="footer-note">Estimates are based on listed specifications, not real-world driving.</div>
+    </div>
+  </footer>
+
+  <!-- Vendored Offline Chart.js -->
+  <script src="./static/vendor/chart.umd.min.js"></script>
+
+  <!-- Simplified Modular JavaScript (3 Files Only) -->
+  <script type="module" src="./static/js/charts.js?v=3.0"></script>
+  <script type="module" src="./static/js/predict.js?v=3.0"></script>
+  <script type="module" src="./static/js/app.js?v=3.0"></script>
+</body>
+
+</html>

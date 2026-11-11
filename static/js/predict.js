@@ -4,6 +4,8 @@
  * prefilling example test cars, and running 3-model predictions.
  */
 
+import { fetchJson, executePrediction } from "./apiClient.js?v=3.0";
+
 let schemaLoaded = false;
 
 const FIELD_ICONS = {
@@ -41,9 +43,8 @@ export async function initPredict() {
 
   // 1. Fetch Schema and Render Inputs
   try {
-    const res = await fetch("/api/predict/schema");
-    if (!res.ok) throw new Error("Could not load schema");
-    const data = await res.json();
+    const data = await fetchJson("/api/predict/schema");
+    if (!data) throw new Error("Could not load schema");
 
     renderMainFields(data.main_fields || [], mainContainer);
     renderOptionalFields(data.optional_fields || [], optionalContainer);
@@ -83,9 +84,8 @@ export async function initPredict() {
       try {
         const originalText = btnExample.innerHTML;
         btnExample.textContent = "Loading...";
-        const res = await fetch("/api/predict/example");
-        if (!res.ok) throw new Error("Could not load example");
-        const data = await res.json();
+        const data = await fetchJson("/api/predict/example");
+        if (!data) throw new Error("Could not load example");
         const inputs = data.inputs || {};
 
         // Fill main and optional fields
@@ -157,15 +157,9 @@ export async function initPredict() {
       }
 
       try {
-        const res = await fetch("/api/predict", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.message || (data.error && data.error.message) || "Failed to predict");
+        const data = await executePrediction(payload);
+        if (!data) {
+          throw new Error("Failed to predict");
         }
 
         // Update results
