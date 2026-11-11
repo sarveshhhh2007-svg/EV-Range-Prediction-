@@ -38,6 +38,8 @@ app = Flask(
     static_folder=str(config.STATIC_DIR)
 )
 app.config["MAX_CONTENT_LENGTH"] = config.MAX_CONTENT_LENGTH
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
 
 def sanitize_for_json(obj: Any) -> Any:
@@ -729,10 +731,9 @@ def handle_500(e):
 
 @app.after_request
 def set_headers(response):
-    if request.path.startswith("/api/predict"):
-        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    elif request.path.startswith("/static/"):
-        response.headers["Cache-Control"] = "public, max-age=3600"
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
     return response
 
 

@@ -4,7 +4,7 @@
  * pagination, search, summary metrics, and chart initialization.
  */
 
-import { initInsightsCharts, initModelsCharts } from "./charts.js";
+import { initInsightsCharts, initModelsCharts } from "./charts.js?v=3.0";
 
 // Global Data Table State
 let currentPage = 1;

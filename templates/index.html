@@ -11,7 +11,7 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2359171B'/><circle cx='16' cy='16' r='8' fill='%23FED7B8'/></svg>">
 
   <!-- External Stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v=3.0">
 
   <!-- Inline Loading Screen CSS (Loads Immediately Before Other Files) -->
   <style>
@@ -590,8 +590,8 @@
   <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
 
   <!-- Simplified Modular JavaScript (3 Files Only) -->
-  <script type="module" src="{{ url_for('static', filename='js/charts.js') }}"></script>
-  <script type="module" src="{{ url_for('static', filename='js/predict.js') }}"></script>
-  <script type="module" src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='js/charts.js') }}?v=3.0"></script>
+  <script type="module" src="{{ url_for('static', filename='js/predict.js') }}?v=3.0"></script>
+  <script type="module" src="{{ url_for('static', filename='js/app.js') }}?v=3.0"></script>
 </body>
 </html>
