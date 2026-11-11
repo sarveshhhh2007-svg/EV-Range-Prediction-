@@ -23,18 +23,8 @@ cells = []
 # Section 1: Project Introduction
 cells.append(nbf.v4.new_markdown_cell("""# Comparative Analysis of Machine Learning Regression Models for Electric Vehicle Driving-Range Prediction
 
-**Course:** Machine Learning (21CSC305P) — Continuous Learning Assessment 2 (CLA-2), Task 3  
-**Institution:** SRM Institute of Science and Technology, Tiruchirappalli  
-**Student:** Sarvesh HS (RA2411026050213)  
-**Programme:** B.Tech Computer Science and Engineering — Artificial Intelligence and Machine Learning (Semester V)  
 **Domain:** Electric Vehicles / Transportation  
 **Primary SDG Alignment:** SDG 9 — Industry, Innovation and Infrastructure (Secondary: SDG 7 — Affordable and Clean Energy)  
-
----
-### Team Contribution Placeholders
-- **Lead Member:** Sarvesh HS (RA2411026050213) — ML Architecture, Preprocessing, Modeling & Evaluation
-- **[Team Member 2 — Name]:** [Register No.] — [Individual contribution: Literature review, EDA documentation]
-- **[Team Member 3 — Name]:** [Register No.] — [Individual contribution: SDG alignment, report drafting]
 
 ---
 ### Scope Clarification

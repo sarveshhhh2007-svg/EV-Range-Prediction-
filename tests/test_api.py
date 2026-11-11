@@ -1,14 +1,14 @@
 """
-REST API and Endpoint Unit Tests.
-Verifies all Flask routes, HTTP status codes, JSON response integrity,
-validation boundaries, and error contract shapes.
+REST API and Endpoint Unit Tests for Simplified EV Range Predictor.
+Verifies all 9 Flask routes, HTTP status codes, JSON response shapes,
+validation boundaries, and error contracts.
 """
 import pytest
 import json
 
 
 def test_api_health(flask_client):
-    """Test /api/health endpoint."""
+    """Test 1: GET /api/health"""
     res = flask_client.get("/api/health")
     assert res.status_code == 200
     data = res.get_json()
@@ -18,25 +18,27 @@ def test_api_health(flask_client):
 
 
 def test_api_summary(flask_client):
-    """Test /api/summary endpoint."""
+    """Test 2: GET /api/summary"""
     res = flask_client.get("/api/summary")
     assert res.status_code == 200
     data = res.get_json()
-    assert data["total_records"] == 478
-    assert data["total_columns"] == 22
-    assert data["target_variable"] == "range_km"
-    assert data["models_trained"] is True
+    assert data["total_vehicles"] == 478
+    assert data["total_features"] == 18
+    assert data["total_models"] == 3
+    assert data["best_model"] == "Linear Regression"
+    assert data["best_model_mae"] == 14.37
 
 
 def test_api_dataset_preview(flask_client):
-    """Test /api/dataset/preview endpoint pagination and search."""
-    res = flask_client.get("/api/dataset/preview?page=1&page_size=10&view=processed")
+    """Test 3: GET /api/dataset/preview"""
+    res = flask_client.get("/api/dataset/preview?page=1&page_size=10")
     assert res.status_code == 200
     data = res.get_json()
     assert data["page"] == 1
     assert data["page_size"] == 10
     assert len(data["data"]) == 10
-    assert "range_km" in data["columns"]
+    assert "Brand" in data["columns"]
+    assert "Range (km)" in data["columns"]
 
     # Search filter
     res_search = flask_client.get("/api/dataset/preview?search=Tesla&page_size=10")
@@ -46,98 +48,122 @@ def test_api_dataset_preview(flask_client):
     assert all("tesla" in str(r["brand"]).lower() for r in search_data["data"])
 
 
-def test_api_preprocessing(flask_client):
-    """Test /api/preprocessing endpoint."""
-    res = flask_client.get("/api/preprocessing")
+def test_api_cleaning(flask_client):
+    """Test 4: GET /api/cleaning"""
+    res = flask_client.get("/api/cleaning")
     assert res.status_code == 200
     data = res.get_json()
-    assert "cleaning_log" in data
-    assert "leakage_audit" in data
-    assert "outliers_detected" in data
+    assert "bullets" in data
+    assert len(data["bullets"]) == 6
+    assert any("478 cars" in b for b in data["bullets"])
 
 
-def test_api_eda_endpoints(flask_client):
-    """Test EDA endpoints: stats, correlation, distribution, scatter."""
-    # Stats
-    res_stats = flask_client.get("/api/eda")
-    assert res_stats.status_code == 200
-    assert "descriptive_statistics" in res_stats.get_json()
-
-    # Correlation
-    res_corr = flask_client.get("/api/eda/correlation")
-    assert res_corr.status_code == 200
-    assert "target_correlations" in res_corr.get_json()
-
-    # Distribution
-    res_dist = flask_client.get("/api/eda/distribution")
-    assert res_dist.status_code == 200
-    assert len(res_dist.get_json()["histogram"]) > 0
-
-    # Whitelisted Scatter
-    res_scat = flask_client.get("/api/eda/scatter?feature=battery_capacity_kWh")
-    assert res_scat.status_code == 200
-    assert len(res_scat.get_json()["points"]) > 0
-
-    # Invalid Scatter feature
-    res_scat_inv = flask_client.get("/api/eda/scatter?feature=invalid_feature_name")
-    assert res_scat_inv.status_code == 400
+def test_api_insights(flask_client):
+    """Test 5: GET /api/insights"""
+    res = flask_client.get("/api/insights")
+    assert res.status_code == 200
+    data = res.get_json()
+    assert "distribution" in data
+    assert "battery_scatter" in data
+    assert "acceleration_scatter" in data
+    assert "correlations" in data
+    assert len(data["distribution"]["bins"]) > 0
+    assert len(data["battery_scatter"]["points"]) > 0
+    assert len(data["acceleration_scatter"]["points"]) > 0
+    assert len(data["correlations"]["items"]) == 8
 
 
 def test_api_models_metrics(flask_client):
-    """Test /api/models/metrics endpoint."""
+    """Test 6: GET /api/models/metrics"""
     res = flask_client.get("/api/models/metrics")
     assert res.status_code == 200
     data = res.get_json()
-    assert "Linear Regression" in data["models"]
-    assert "Random Forest" in data["models"]
-    assert "Gradient Boosting" in data["models"]
-    assert data["recommended_model"] is not None
+    assert len(data["models"]) == 3
+    model_names = [m["name"] for m in data["models"]]
+    assert "Linear Regression" in model_names
+    assert "Random Forest" in model_names
+    assert "Gradient Boosting" in model_names
+    assert data["best_model"] == "Linear Regression"
+    assert "actual_vs_predicted" in data
+    assert len(data["actual_vs_predicted"]["points"]) > 0
 
 
-def test_api_predict_flow(flask_client):
-    """Test prediction schema, test example loader, and prediction inference."""
-    # Schema
-    res_schema = flask_client.get("/api/predict/schema")
-    assert res_schema.status_code == 200
-    assert len(res_schema.get_json()["groups"]) >= 4
+def test_api_predict_schema(flask_client):
+    """Test 7: GET /api/predict/schema"""
+    res = flask_client.get("/api/predict/schema")
+    assert res.status_code == 200
+    data = res.get_json()
+    assert "main_fields" in data
+    assert "optional_fields" in data
+    assert len(data["main_fields"]) == 6
+    field_names = [f["name"] for f in data["main_fields"]]
+    assert "battery_capacity_kWh" in field_names
+    assert "top_speed_kmh" in field_names
 
-    # Example
-    res_ex = flask_client.get("/api/predict/example")
-    assert res_ex.status_code == 200
-    ex_data = res_ex.get_json()
-    assert "actual_range_km" in ex_data
-    assert "inputs" in ex_data
 
-    # Valid POST prediction
-    res_pred = flask_client.post("/api/predict", json=ex_data["inputs"])
-    assert res_pred.status_code == 200
-    pred_data = res_pred.get_json()
-    assert "Linear Regression" in pred_data["predictions"]
-    assert "Random Forest" in pred_data["predictions"]
-    assert "Gradient Boosting" in pred_data["predictions"]
-    assert pred_data["spread_between_models_km"] >= 0
+def test_api_predict_example(flask_client):
+    """Test 8: GET /api/predict/example"""
+    res = flask_client.get("/api/predict/example")
+    assert res.status_code == 200
+    data = res.get_json()
+    assert "inputs" in data
+    assert "actual_range_km" in data
+    assert data["actual_range_km"] > 0
+    assert "battery_capacity_kWh" in data["inputs"]
 
-    # Invalid POST: negative battery
-    res_neg = flask_client.post("/api/predict", json={"battery_capacity_kWh": -15.0})
-    assert res_neg.status_code == 422
-    assert "cannot be negative" in res_neg.get_json()["error"]["message"]
 
-    # Invalid POST: missing battery capacity
-    res_miss = flask_client.post("/api/predict", json={"top_speed_kmh": 180})
-    assert res_miss.status_code == 422
-    assert "Missing required field" in res_miss.get_json()["error"]["message"]
+def test_api_predict_inference(flask_client):
+    """Test 9: POST /api/predict"""
+    # Valid prediction with example inputs
+    ex_res = flask_client.get("/api/predict/example")
+    ex_data = ex_res.get_json()
 
-    # Non-JSON content type
-    res_bad_ct = flask_client.post("/api/predict", data="hello world")
-    assert res_bad_ct.status_code in [415, 422]
+    res = flask_client.post("/api/predict", json=ex_data["inputs"])
+    assert res.status_code == 200
+    data = res.get_json()
+    assert "predictions" in data
+    assert "Linear Regression" in data["predictions"]
+    assert "Random Forest" in data["predictions"]
+    assert "Gradient Boosting" in data["predictions"]
+    assert data["predictions"]["Linear Regression"] > 0
+    assert "bars" in data
+    assert "best_model" in data
+
+    # Validation: missing battery capacity
+    res_no_bat = flask_client.post("/api/predict", json={"top_speed_kmh": 180})
+    assert res_no_bat.status_code == 422
+    assert "Battery capacity is required" in res_no_bat.get_json()["message"]
+
+    # Validation: negative battery capacity
+    res_neg_bat = flask_client.post("/api/predict", json={"battery_capacity_kWh": -50})
+    assert res_neg_bat.status_code == 422
+    assert "greater than 0" in res_neg_bat.get_json()["message"]
+
+    # Validation: negative numeric field
+    res_neg_val = flask_client.post("/api/predict", json={"battery_capacity_kWh": 75, "torque_nm": -100})
+    assert res_neg_val.status_code == 422
+    assert "cannot be negative" in res_neg_val.get_json()["message"]
+
+    # Validation: non-JSON content type
+    res_non_json = flask_client.post("/api/predict", data="not json", content_type="text/plain")
+    assert res_non_json.status_code == 415
 
 
 def test_no_nan_in_json_responses(flask_client):
-    """Ensures raw NaN never appears in serialized JSON strings."""
-    for ep in ["/api/summary", "/api/dataset/preview", "/api/preprocessing", "/api/eda", "/api/models/metrics"]:
+    """Ensures raw NaN never appears in serialized JSON strings for any endpoint."""
+    endpoints = [
+        "/api/health",
+        "/api/summary",
+        "/api/dataset/preview",
+        "/api/cleaning",
+        "/api/insights",
+        "/api/models/metrics",
+        "/api/predict/schema",
+        "/api/predict/example"
+    ]
+    for ep in endpoints:
         res = flask_client.get(ep)
+        assert res.status_code == 200
         text = res.get_data(as_text=True)
         assert ": NaN" not in text
         assert ": NaN," not in text
-        assert ": Infinity" not in text
-

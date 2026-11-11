@@ -1,255 +1,272 @@
 /**
- * Interactive Charts Module.
- * Integrates Chart.js with the Burgundy & Peach design identity,
- * enforces accessible tabular alternatives, and handles dynamic scatter switching.
+ * Charts Controller.
+ * Handles the 4 Insights charts and 2 Models comparison charts using Chart.js.
+ * Strictly uses the Burgundy & Peach palette.
  */
 
-import { API } from './api.js';
-
-// Global palette definition for Chart.js
 const PALETTE = {
-  burgundy900: '#59171B',
-  burgundy700: '#8B4947',
-  burgundy500: '#A86B63',
-  peach500: '#E8B38D',
-  peach300: '#FED7B8',
-  peach100: '#FFF1E6',
-  peach50: '#FFF9F4',
+  burgundy: '#59171B',
+  rose: '#8B4947',
+  peach: '#E8B38D',
   ink: '#3A0E11',
-  inkMuted: '#6B4546',
+  muted: '#6B4546',
   line: 'rgba(89, 23, 27, 0.14)'
 };
 
-let activeScatterChart = null;
-let activeDistributionChart = null;
-let activeComparisonChart = null;
-
-export async function initDistributionChart() {
-  const ctx = document.getElementById('chart-distribution');
-  if (!ctx || !window.Chart) return;
+export async function initInsightsCharts() {
+  if (!window.Chart) return;
 
   try {
-    const data = await API.getEDADistribution();
-    const bins = data.histogram;
-    const labels = bins.map(b => b.label);
-    const counts = bins.map(b => b.count);
+    const res = await fetch('/api/insights');
+    if (!res.ok) return;
+    const data = await res.json();
 
-    if (activeDistributionChart) activeDistributionChart.destroy();
-
-    activeDistributionChart = new window.Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Vehicle Count',
-          data: counts,
-          backgroundColor: PALETTE.burgundy900,
-          borderColor: PALETTE.peach500,
-          borderWidth: 1.5,
-          borderRadius: 6
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: PALETTE.ink,
-            titleColor: PALETTE.peach50,
-            bodyColor: PALETTE.peach50,
-            padding: 10,
-            cornerRadius: 8
-          }
+    // 1. Driving Range Distribution (Histogram)
+    const ctxDist = document.getElementById('chart-distribution');
+    if (ctxDist && data.distribution) {
+      new window.Chart(ctxDist, {
+        type: 'bar',
+        data: {
+          labels: data.distribution.bins.map(b => b.label),
+          datasets: [{
+            data: data.distribution.bins.map(b => b.count),
+            backgroundColor: PALETTE.burgundy,
+            borderRadius: 4
+          }]
         },
-        scales: {
-          x: {
-            grid: { display: false },
-            ticks: { color: PALETTE.inkMuted, font: { size: 11 } }
-          },
-          y: {
-            grid: { color: PALETTE.line },
-            ticks: { color: PALETTE.inkMuted, font: { size: 11 } }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: PALETTE.muted, font: { size: 11 } } },
+            y: { grid: { color: PALETTE.line }, ticks: { color: PALETTE.muted, font: { size: 11 } } }
           }
         }
-      }
-    });
+      });
+      const capDist = document.getElementById('caption-distribution');
+      if (capDist) capDist.textContent = data.distribution.caption;
+    }
 
-    // Populate accessible table alternative
-    populateAccessibleTable('chart-distribution-table', [
-      { header: 'Range Band', key: 'label' },
-      { header: 'Vehicle Frequency', key: 'count' }
-    ], bins);
-  } catch (err) {
-    console.error('Failed to init distribution chart:', err);
-  }
-}
-
-export async function updateScatterChart(featureName) {
-  const ctx = document.getElementById('chart-scatter');
-  if (!ctx || !window.Chart) return;
-
-  try {
-    const data = await API.getEDAScatter(featureName);
-    const scatterPoints = data.points.map(pt => ({
-      x: pt.x,
-      y: pt.y,
-      brand: pt.brand,
-      model: pt.model
-    }));
-
-    if (activeScatterChart) activeScatterChart.destroy();
-
-    activeScatterChart = new window.Chart(ctx, {
-      type: 'scatter',
-      data: {
-        datasets: [{
-          label: `${data.feature_label} vs Range`,
-          data: scatterPoints,
-          backgroundColor: PALETTE.burgundy700,
-          borderColor: PALETTE.peach300,
-          borderWidth: 1,
-          pointRadius: 5,
-          pointHoverRadius: 8
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: PALETTE.ink,
-            titleColor: PALETTE.peach50,
-            bodyColor: PALETTE.peach50,
-            callbacks: {
-              title: (items) => {
-                const pt = items[0].raw;
-                return `${pt.brand} ${pt.model}`;
-              },
-              label: (item) => {
-                const pt = item.raw;
-                return `${data.feature_label}: ${pt.x} ${data.unit} | Range: ${pt.y} km`;
+    // 2. Battery Capacity vs Range (Scatter)
+    const ctxBat = document.getElementById('chart-battery');
+    if (ctxBat && data.battery_scatter) {
+      new window.Chart(ctxBat, {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            data: data.battery_scatter.points,
+            backgroundColor: PALETTE.rose,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title: (items) => items[0].raw.label || '',
+                label: (item) => `Battery: ${item.raw.x} kWh | Range: ${item.raw.y} km`
               }
             }
-          }
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: `${data.feature_label} (${data.unit})`,
-              color: PALETTE.ink,
-              font: { weight: 'bold' }
-            },
-            grid: { color: PALETTE.line },
-            ticks: { color: PALETTE.inkMuted }
           },
-          y: {
-            title: {
-              display: true,
-              text: 'Listed Driving Range (km)',
-              color: PALETTE.ink,
-              font: { weight: 'bold' }
+          scales: {
+            x: {
+              title: { display: true, text: 'Battery capacity (kWh)', color: PALETTE.ink },
+              grid: { color: PALETTE.line },
+              ticks: { color: PALETTE.muted }
             },
-            grid: { color: PALETTE.line },
-            ticks: { color: PALETTE.inkMuted }
+            y: {
+              title: { display: true, text: 'Listed range (km)', color: PALETTE.ink },
+              grid: { color: PALETTE.line },
+              ticks: { color: PALETTE.muted }
+            }
           }
         }
-      }
-    });
+      });
+      const capBat = document.getElementById('caption-battery');
+      if (capBat) capBat.textContent = data.battery_scatter.caption;
+    }
 
-    // Populate accessible table alternative
-    populateAccessibleTable('chart-scatter-table', [
-      { header: 'Vehicle', formatter: r => `${r.brand} ${r.model}` },
-      { header: `${data.feature_label} (${data.unit})`, key: 'x' },
-      { header: 'Range (km)', key: 'y' }
-    ], scatterPoints.slice(0, 15)); // Sample top 15 for table
+    // 3. Acceleration Time vs Range (Scatter)
+    const ctxAcc = document.getElementById('chart-acceleration');
+    if (ctxAcc && data.acceleration_scatter) {
+      new window.Chart(ctxAcc, {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            data: data.acceleration_scatter.points,
+            backgroundColor: PALETTE.peach,
+            borderColor: PALETTE.burgundy,
+            borderWidth: 1,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title: (items) => items[0].raw.label || '',
+                label: (item) => `0–100 km/h: ${item.raw.x} s | Range: ${item.raw.y} km`
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: '0–100 km/h time (s)', color: PALETTE.ink },
+              grid: { color: PALETTE.line },
+              ticks: { color: PALETTE.muted }
+            },
+            y: {
+              title: { display: true, text: 'Listed range (km)', color: PALETTE.ink },
+              grid: { color: PALETTE.line },
+              ticks: { color: PALETTE.muted }
+            }
+          }
+        }
+      });
+      const capAcc = document.getElementById('caption-acceleration');
+      if (capAcc) capAcc.textContent = data.acceleration_scatter.caption;
+    }
+
+    // 4. Top 8 Correlations Horizontal Bar
+    const ctxCorr = document.getElementById('chart-correlations');
+    if (ctxCorr && data.correlations) {
+      new window.Chart(ctxCorr, {
+        type: 'bar',
+        data: {
+          labels: data.correlations.items.map(i => i.feature),
+          datasets: [{
+            data: data.correlations.items.map(i => i.value),
+            backgroundColor: data.correlations.items.map(i => i.value >= 0 ? PALETTE.burgundy : PALETTE.rose),
+            borderRadius: 4
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              title: { display: true, text: 'Correlation with listed range', color: PALETTE.ink },
+              grid: { color: PALETTE.line },
+              ticks: { color: PALETTE.muted }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { color: PALETTE.ink, font: { weight: '600' } }
+            }
+          }
+        }
+      });
+      const capCorr = document.getElementById('caption-correlations');
+      if (capCorr) capCorr.textContent = data.correlations.caption;
+    }
   } catch (err) {
-    console.error('Failed to update scatter chart:', err);
+    console.error('Error loading insights charts:', err);
   }
 }
 
-export async function initComparisonChart() {
-  const ctx = document.getElementById('chart-comparison');
-  if (!ctx || !window.Chart) return;
+export async function initModelsCharts() {
+  if (!window.Chart) return;
 
   try {
-    const data = await API.getModelMetrics();
-    const models = Object.keys(data.models);
-    const maes = models.map(m => data.models[m].test_metrics.mae);
-    const rmses = models.map(m => data.models[m].test_metrics.rmse);
+    const res = await fetch('/api/models/metrics');
+    if (!res.ok) return;
+    const data = await res.json();
 
-    if (activeComparisonChart) activeComparisonChart.destroy();
-
-    activeComparisonChart = new window.Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: models,
-        datasets: [
-          {
-            label: 'Test MAE (km)',
-            data: maes,
-            backgroundColor: PALETTE.burgundy900,
-            borderRadius: 6
-          },
-          {
-            label: 'Test RMSE (km)',
-            data: rmses,
-            backgroundColor: PALETTE.peach500,
-            borderRadius: 6
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'top',
-            labels: { color: PALETTE.ink, font: { weight: 'bold' } }
-          },
-          tooltip: {
-            backgroundColor: PALETTE.ink,
-            titleColor: PALETTE.peach50,
-            bodyColor: PALETTE.peach50
-          }
+    // 1. MAE Comparison Bar Chart
+    const ctxMae = document.getElementById('chart-mae-compare');
+    if (ctxMae && data.mae_bars) {
+      new window.Chart(ctxMae, {
+        type: 'bar',
+        data: {
+          labels: data.mae_bars.map(m => m.model),
+          datasets: [{
+            data: data.mae_bars.map(m => m.mae),
+            backgroundColor: [PALETTE.burgundy, PALETTE.rose, PALETTE.peach],
+            borderColor: PALETTE.burgundy,
+            borderWidth: 1,
+            borderRadius: 4
+          }]
         },
-        scales: {
-          x: { grid: { display: false }, ticks: { color: PALETTE.ink } },
-          y: {
-            title: { display: true, text: 'Error in km (Lower is better)', color: PALETTE.inkMuted },
-            grid: { color: PALETTE.line },
-            ticks: { color: PALETTE.inkMuted }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: PALETTE.ink, font: { weight: '600' } } },
+            y: {
+              title: { display: true, text: 'Average error in km (lower is better)', color: PALETTE.muted },
+              grid: { color: PALETTE.line },
+              ticks: { color: PALETTE.muted }
+            }
           }
         }
-      }
-    });
+      });
+    }
+
+    // 2. Actual vs Predicted Scatter (Best Model)
+    const ctxAct = document.getElementById('chart-actual-vs-predicted');
+    if (ctxAct && data.actual_vs_predicted && data.actual_vs_predicted.points) {
+      const pts = data.actual_vs_predicted.points.map(p => ({ x: p.actual, y: p.predicted, label: p.label }));
+      new window.Chart(ctxAct, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: 'Predictions',
+              data: pts,
+              backgroundColor: PALETTE.burgundy,
+              pointRadius: 4
+            },
+            {
+              label: 'Ideal line',
+              data: [{ x: 100, y: 100 }, { x: 700, y: 700 }],
+              type: 'line',
+              borderColor: PALETTE.muted,
+              borderDash: [5, 5],
+              fill: false,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title: (items) => items[0].raw.label || '',
+                label: (item) => `Actual: ${item.raw.x} km | Predicted: ${item.raw.y} km`
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Actual listed range (km)', color: PALETTE.ink },
+              grid: { color: PALETTE.line },
+              ticks: { color: PALETTE.muted }
+            },
+            y: {
+              title: { display: true, text: 'Predicted range (km)', color: PALETTE.ink },
+              grid: { color: PALETTE.line },
+              ticks: { color: PALETTE.muted }
+            }
+          }
+        }
+      });
+    }
   } catch (err) {
-    console.error('Failed to init comparison chart:', err);
+    console.error('Error loading models charts:', err);
   }
 }
-
-function populateAccessibleTable(containerId, columns, dataRows) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  let html = '<table class="data-table"><thead><tr>';
-  columns.forEach(col => {
-    html += `<th>${col.header}</th>`;
-  });
-  html += '</tr></thead><tbody>';
-
-  dataRows.forEach(row => {
-    html += '<tr>';
-    columns.forEach(col => {
-      const val = col.formatter ? col.formatter(row) : row[col.key];
-      html += `<td>${val !== undefined && val !== null ? val : '—'}</td>`;
-    });
-    html += '</tr>';
-  });
-  html += '</tbody></table>';
-
-  container.innerHTML = html;
-}
-

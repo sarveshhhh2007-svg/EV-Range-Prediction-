@@ -1,23 +1,8 @@
 # Comparative Analysis of Machine Learning Regression Models for Electric Vehicle Driving-Range Prediction
 
-**Academic Assessment:** Continuous Learning Assessment 2 (CLA-2), Task 3 — Case-Based Implementation  
-**Course:** Machine Learning (Course Code: 21CSC305P)  
-**Institution:** SRM Institute of Science and Technology, Tiruchirappalli  
-**Degree Programme:** B.Tech Computer Science and Engineering — Artificial Intelligence and Machine Learning  
-**Semester:** V  
-**Lead Contributor:** Sarvesh HS (Register Number: RA2411026050213)  
 **Application Domain:** Electric Vehicles / Intelligent Transportation Systems  
 **Primary UN SDG Alignment:** SDG 9 — Industry, Innovation and Infrastructure  
 **Secondary UN SDG Alignment:** SDG 7 — Affordable and Clean Energy  
-
----
-
-### Collaborative Team Contribution Block
-| Role | Contributor Name | Register Number | Individual Academic Contribution |
-| :--- | :--- | :--- | :--- |
-| **Lead Developer & ML Engineer** | Sarvesh HS | RA2411026050213 | System architecture design, data loading & verification, preprocessing pipeline construction, model implementation & cross-validation tuning, Flask REST API development, vanilla frontend engineering, and end-to-end testing. |
-| **Team Member 2** | [Team Member 2 — Name] | [Register No.] | [Individual contribution: Literature survey of EV range prediction paradigms, exploratory data analysis documentation, and assisting in residual error analysis.] |
-| **Team Member 3** | [Team Member 3 — Name] | [Register No.] | [Individual contribution: UN Sustainable Development Goals (SDG 9 & 7) alignment research, technical documentation drafting, and viva voce presentation preparation.] |
 
 ---
 
